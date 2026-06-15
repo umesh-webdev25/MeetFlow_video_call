@@ -38,8 +38,18 @@ export const useMeeting = () => {
     setMeetingError(null);
     try {
       const data = await joinGroupMeetingWithCode(meetingCode);
-      setActiveMeeting(data);
-      navigate(`/meeting/room/${data.roomId}`);
+      setActiveMeeting({
+        meetingCode: meetingCode,
+        roomId: data.roomId,
+        groupId: data.groupId,
+        activeParticipants: data.activeParticipants
+      });
+      navigate(`/meeting/room/${data.roomId}`, {
+        state: { 
+          meetingCode: meetingCode,
+          groupId: data.groupId 
+        }
+      });
       return data;
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to join meeting";

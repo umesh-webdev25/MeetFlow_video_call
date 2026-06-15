@@ -40,9 +40,29 @@ export const generateStreamToken = (userId) => {
     if (!streamClient) throw new Error("Stream client is not initialized (missing API key/secret)");
     // ensure userId is a string
     const userIdStr = userId.toString();
-    return streamClient.createToken(userIdStr);
+    // Generate token with extended expiration for video calls (24 hours)
+    const token = streamClient.createToken(userIdStr, Math.floor(Date.now() / 1000) + 86400);
+    return token;
   } catch (error) {
     console.error("Error generating Stream token:", error && error.message ? error.message : error);
+    throw error;
+  }
+};
+
+export const createVideoCallToken = (userId, callId = "default") => {
+  try {
+    if (!streamClient) throw new Error("Stream client is not initialized (missing API key/secret)");
+    const userIdStr = userId.toString();
+    // Create token specifically for video calls with proper permissions
+    const token = streamClient.createToken(userIdStr, Math.floor(Date.now() / 1000) + 86400);
+    return {
+      token,
+      apiKey,
+      userId: userIdStr,
+      callId
+    };
+  } catch (error) {
+    console.error("Error creating video call token:", error && error.message ? error.message : error);
     throw error;
   }
 };
