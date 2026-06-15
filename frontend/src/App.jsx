@@ -97,7 +97,7 @@ const App = () => {
           element={
             <ProtectedRoute requireOnboarding={false}>
               {authUser?.isOnboarded ? (
-                <Navigate to="/" replace />
+                <Navigate to="/" replace /> // Redirect to home if already onboarded
               ) : (
                 <OnboardingPage />
               )}
