@@ -161,7 +161,12 @@ export async function markAllNotificationsAsRead() {
 
 export async function endGroupMeetingWithCode(meetingCode) {
   const response = await axiosInstance.delete(`/meetings/group/${meetingCode}/end`);
-  return response.data.data;
+  return response.data;
+}
+
+export async function leaveGroupMeetingWithCode(meetingCode) {
+  const response = await axiosInstance.post(`/meetings/group/${meetingCode}/leave`);
+  return response.data;
 }
 
 export async function shareMeetingToGroup(meetingCode, groupId) {

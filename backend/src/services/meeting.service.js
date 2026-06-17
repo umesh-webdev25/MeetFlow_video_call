@@ -102,7 +102,7 @@ class MeetingService {
   async endMeeting(roomId, userId) {
     const meeting = await this.verifyMeetingAccess(roomId, userId);
     if (meeting.hostId.toString() !== userId.toString()) {
-      throw new AppError("Only the host can end the meeting", 403);
+      throw new AppError("Only the administrator can end the meeting.", 403);
     }
 
     return await meetingRepository.endMeeting(roomId);
@@ -244,10 +244,23 @@ class MeetingService {
     if (!meeting) throw new AppError("Meeting not found", 404);
     
     if (meeting.hostId.toString() !== userId.toString()) {
-      throw new AppError("Only the host can end the meeting", 403);
+      throw new AppError("Only the administrator can end the meeting.", 403);
     }
 
     return await meetingRepository.endMeetingById(meeting._id);
+  }
+
+  async leaveMeetingWithCode(meetingCode, userId) {
+    const meeting = await meetingRepository.findMeetingByCode(meetingCode);
+    if (!meeting) return null;
+
+    const updatedMeeting = await meetingRepository.removeParticipant(meeting._id, userId);
+    
+    if (updatedMeeting && updatedMeeting.activeParticipants === 0) {
+      await meetingRepository.endMeetingById(updatedMeeting._id);
+      updatedMeeting.status = "ended";
+    }
+    return updatedMeeting;
   }
 
   async startScheduledMeeting(scheduleId, userId, reqInfo) {
@@ -405,9 +418,10 @@ class MeetingService {
     const Meeting = (await import("../models/Meeting.js")).default;
     const activeMeetings = await Meeting.find({
       groupId: { $in: groupIds },
-      status: "active"
+      status: "active",
+      activeParticipants: { $gt: 0 }
     }).populate("hostId", "fullName profilePic").lean();
-
+    console.log("Active meetings:", activeMeetings);
     return activeMeetings.map(meeting => {
       const group = groups.find(g => g._id.toString() === meeting.groupId.toString());
       return {

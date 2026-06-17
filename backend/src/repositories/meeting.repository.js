@@ -44,13 +44,17 @@ class MeetingRepository {
       .populate("hostId", "fullName profilePic");
   }
 
-  async endMeeting(roomId) {
-    return await Meeting.findOneAndUpdate(
-      { roomId },
-      { status: "ended", endedAt: new Date() },
-      { new: true }
-    );
-  }
+async endMeeting(roomId) {
+  return await Meeting.findOneAndUpdate(
+    { roomId },
+    {
+      status: "ended",
+      endedAt: new Date(),
+      activeParticipants: 0
+    },
+    { new: true }
+  );
+}
 
   async createMeeting(data) {
     return await Meeting.create(data);
@@ -102,15 +106,17 @@ class MeetingRepository {
     }
     return meeting;
   }
-
-  async endMeetingById(meetingId) {
-    return await Meeting.findByIdAndUpdate(
-      meetingId,
-      { status: "ended", endedAt: new Date() },
-      { new: true }
-    );
-  }
-
+async endMeetingById(meetingId) {
+  return await Meeting.findByIdAndUpdate(
+    meetingId,
+    {
+      status: "ended",
+      endedAt: new Date(),
+      activeParticipants: 0
+    },
+    { new: true }
+  );
+}
   async findMeetingByRoomId(roomId) {
     return await Meeting.findOne({ roomId });
   }

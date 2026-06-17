@@ -310,19 +310,6 @@ const GroupContacts = () => {
         </div>
 
         {/* Right */}
-        <button
-          className="
-      w-10 h-10
-      rounded-xl
-      flex items-center justify-center
-      text-base-content/40
-      hover:text-base-content
-      hover:bg-base-200
-      transition-all
-    "
-        >
-          <MoreVerticalIcon className="w-5 h-5" />
-        </button>
       </div>
 
       {/* ── STAT CARDS ── */}
@@ -534,7 +521,7 @@ const GroupContacts = () => {
                 });
                 setOpenModal(true);
               }}
-              className="h-10 px-4 rounded-xl bg-success hover:bg-success/90 text-success-content text-sm font-semibold flex items-center gap-1.5 transition-colors"
+              className="h-10 px-4 rounded-xl bg-primary hover:bg-primary/90 text-primary-content text-sm font-semibold flex items-center gap-1.5 transition-colors"
             >
               <PlusIcon className="w-4 h-4" />
               Add Contact

@@ -15,7 +15,7 @@ const Navbar = () => {
   const location = useLocation();
   const isChatPage = location.pathname?.startsWith("/chat");
   const { toggleTheme, theme } = useThemeStore();
-  const { logoutMutation } = useLogout();
+  const { logoutMutation } = useLogout(); 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {

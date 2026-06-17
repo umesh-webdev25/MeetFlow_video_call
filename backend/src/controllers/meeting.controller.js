@@ -2,7 +2,7 @@ import meetingService from "../services/meeting.service.js";
 import authService from "../services/auth.service.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/apiResponse.js";
-import Group from "../models/Group.js";
+import Group from "../models/group.js";
 import notificationService from "../services/notification.service.js";
 
 export const createMeeting = asyncHandler(async (req, res) => {
@@ -30,7 +30,11 @@ export const joinMeeting = asyncHandler(async (req, res) => {
 });
 
 export const endMeeting = asyncHandler(async (req, res) => {
-  await meetingService.endMeeting(req.params.roomId, req.user._id);
+  const result = await meetingService.endMeeting(req.params.roomId, req.user._id);
+  const io = req.app.get("io");
+  if (io && result) {
+    io.to(`meeting:${result.roomId}`).emit("meeting_ended_by_host", { roomId: result.roomId });
+  }
   return ApiResponse.success(res, null, "Meeting ended");
 });
 
@@ -87,6 +91,7 @@ export const endMeetingWithCode = asyncHandler(async (req, res) => {
   const io = req.app.get("io");
   if (io && result) {
     io.to(`group:${result.groupId}`).emit("meeting_ended", { meetingCode, groupId: result.groupId });
+    io.to(`meeting:${result.roomId}`).emit("meeting_ended_by_host", { meetingCode, roomId: result.roomId });
     
     try {
       const group = await Group.findById(result.groupId);
@@ -101,6 +106,27 @@ export const endMeetingWithCode = asyncHandler(async (req, res) => {
   }
 
   return ApiResponse.success(res, null, "Meeting ended");
+});
+
+export const leaveGroupMeeting = asyncHandler(async (req, res) => {
+  const { meetingCode } = req.params;
+  const result = await meetingService.leaveMeetingWithCode(meetingCode, req.user._id);
+
+  const io = req.app.get("io");
+  if (io && result) {
+    try {
+      const group = await Group.findById(result.groupId);
+      if (group) {
+        for (const member of group.members) {
+          io.to(`user:${member.userId._id || member.userId}`).emit("active_meetings_updated", { groupId: group._id });
+        }
+      }
+    } catch (e) {
+      console.error("Failed to emit active_meetings_updated on leave:", e.message);
+    }
+  }
+
+  return ApiResponse.success(res, null, "Successfully left meeting");
 });
 
 export const shareMeetingToGroup = asyncHandler(async (req, res) => {

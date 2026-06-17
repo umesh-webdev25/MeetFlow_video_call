@@ -20,7 +20,8 @@ import {
   getActiveGroupMeeting,
   getAllActiveGroupMeetings,
   joinScheduledMeeting,
-  startScheduledMeeting
+  startScheduledMeeting,
+  leaveGroupMeeting
 } from "../controllers/meeting.controller.js";
 import {
   createMeetingSchema,
@@ -49,6 +50,7 @@ router.post("/group/create", validate(createGroupMeetingSchema), createGroupMeet
 router.post("/group/join", validate(joinMeetingWithCodeSchema), joinMeetingWithCode);
 router.post("/group/share", validate(shareMeetingToGroupSchema), shareMeetingToGroup);
 router.delete("/group/:meetingCode/end", endMeetingWithCode);
+router.post("/group/:meetingCode/leave", leaveGroupMeeting);
 router.get("/group/:meetingCode", getMeetingByCode);
 router.get("/group/:groupId/active", getActiveGroupMeeting);
 router.post("/group/join-scheduled", joinScheduledMeeting);

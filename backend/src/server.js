@@ -100,9 +100,23 @@ app.all("*", (req, res, next) => {
 // 3. GLOBAL ERROR HANDLER
 app.use(errorMiddleware);
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, async () => {
   console.log(`🚀 Server is running on port ${PORT}`);
-  connectDB();
+  await connectDB();
+  
+  // One-time cleanup for ghost meetings from before the leave bug fix
+  try {
+    const Meeting = (await import("./models/Meeting.js")).default;
+    const result = await Meeting.updateMany(
+      { status: "active" },
+      { $set: { status: "ended", activeParticipants: 0, endedAt: new Date() } }
+    );
+    if (result.modifiedCount > 0) {
+      console.log(`🧹 Cleaned up ${result.modifiedCount} ghost meetings.`);
+    }
+  } catch (e) {
+    console.error("Cleanup error:", e.message);
+  }
 });
 
 const io = new Server(server, {
@@ -180,6 +194,13 @@ io.on("connection", (socket) => {
       }
     } catch (e) {
       console.error("Socket room join authorization failed:", e.message);
+    }
+  });
+
+  socket.on("join_meeting_room", (roomId) => {
+    if (roomId) {
+      socket.join(`meeting:${roomId}`);
+      console.log(`Socket ${socket.id} joined meeting room meeting:${roomId}`);
     }
   });
 

@@ -41,7 +41,11 @@ import LeaveMeetingModal from "../components/meeting/LeaveMeetingModal";
 import { useMeetingStore } from "../store/useMeetingStore";
 import { useMeeting } from "../hooks/useMeeting";
 import { useSocketStore } from "../store/useSocketStore";
-import { approveJoinRequest, rejectJoinRequest } from "../lib/api";
+import { 
+  rejectJoinRequest, 
+  approveJoinRequest,
+  leaveGroupMeetingWithCode
+} from "../lib/api";
 
 const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY;
 
@@ -63,6 +67,7 @@ const MeetingRoomPage = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [raisedHands, setRaisedHands] = useState(new Set());
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const [endedByHost, setEndedByHost] = useState(false);
 
   const clientRef = useRef(null);
   const callRef = useRef(null);
@@ -189,7 +194,7 @@ const MeetingRoomPage = () => {
 
   const handleEndCall = async (endForEveryone) => {
     if (endForEveryone && callRef.current) {
-      callRef.current.endCall();
+      setEndedByHost(true);
       if (activeMeeting?.meetingCode) {
         try {
           await handleEndMeeting(activeMeeting.meetingCode);
@@ -197,9 +202,54 @@ const MeetingRoomPage = () => {
           console.error("Failed to end group meeting record:", err);
         }
       }
+      await callRef.current.endCall();
+    } else if (callRef.current) {
+      if (activeMeeting?.meetingCode) {
+        try {
+          await leaveGroupMeetingWithCode(activeMeeting.meetingCode);
+        } catch (err) {
+          console.error("Failed to leave group meeting record:", err);
+        }
+      }
+      await callRef.current.leave();
     }
     clearMeetingState();
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (activeMeeting?.meetingCode) {
+        navigator.sendBeacon(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/meetings/group/${activeMeeting.meetingCode}/leave`);
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      handleBeforeUnload(); // Call on unmount
+    };
+  }, [activeMeeting?.meetingCode]);
+
+  if (endedByHost) {
+    return (
+      <div className="h-screen bg-[#050505] text-white flex items-center justify-center p-6">
+        <div className="glass-dark p-12 rounded-[3rem] border border-white/5 text-center max-w-lg space-y-6">
+          <div className="size-20 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-4">
+            <PhoneOffIcon className="size-10" />
+          </div>
+          <h2 className="text-3xl font-black tracking-tighter">Meeting Ended</h2>
+          <p className="text-white/60 font-bold">
+            The administrator has ended the meeting. All participants have been disconnected from the video call.
+          </p>
+          <button 
+            onClick={() => navigate("/meeting/lobby")}
+            className="btn btn-primary mt-6 w-full rounded-2xl font-black h-14"
+          >
+            Return to Lobby
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading || isConnecting) return <PageLoader />;
 
@@ -243,6 +293,7 @@ const MeetingRoomPage = () => {
               showNewMsgToast={showNewMsgToast}
               setShowNewMsgToast={setShowNewMsgToast}
               meetingCode={activeMeeting?.meetingCode}
+              setEndedByHost={setEndedByHost}
             />
           </StreamCall>
         </StreamVideo>
@@ -309,6 +360,7 @@ const MeetingRoomContent = ({
   showNewMsgToast,
   setShowNewMsgToast,
   meetingCode,
+  setEndedByHost,
 }) => {
   const {
     useCallCallingState,
@@ -358,6 +410,28 @@ const MeetingRoomContent = ({
     };
   }, [socket, isHost]);
 
+  useEffect(() => {
+    if (!socket) return;
+    const { activeMeeting } = useMeetingStore.getState();
+    if (activeMeeting?.groupId) {
+      socket.emit("join_group_room", activeMeeting.groupId);
+    }
+    if (roomId) {
+      socket.emit("join_meeting_room", roomId);
+    }
+    const handleMeetingEnded = (data) => {
+      if (data.meetingCode === meetingCode || data.roomId === roomId) {
+        setEndedByHost(true);
+      }
+    };
+    socket.on("meeting_ended", handleMeetingEnded);
+    socket.on("meeting_ended_by_host", handleMeetingEnded); // for direct meetings
+    return () => {
+      socket.off("meeting_ended", handleMeetingEnded);
+      socket.off("meeting_ended_by_host", handleMeetingEnded);
+    };
+  }, [socket, meetingCode, roomId]);
+
   const handleApproveRequest = async (request) => {
     try {
       await approveJoinRequest(request.meetingId, request.userId);
@@ -378,10 +452,16 @@ const MeetingRoomContent = ({
     (p) => p.sessionId !== localParticipant?.sessionId,
   );
 
-  if (callingState === CallingState.LEFT) {
-    navigate("/meeting/lobby");
-    return null;
-  }
+  useEffect(() => {
+    if (callingState === CallingState.LEFT) {
+      // If the meeting was ended by host, the parent will unmount this component anyway.
+      // We give it a short delay to allow the socket event to trigger `endedByHost`.
+      const timer = setTimeout(() => {
+        navigate("/meeting/lobby");
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [callingState, navigate]);
 
   const raiseHand = () => {
     const id = localParticipant?.sessionId;
@@ -774,7 +854,7 @@ const MeetingRoomContent = ({
           `,
                   isMobile ? "w-12 h-12" : "w-14 h-14",
                 )}
-                title="End Meeting"
+                title={isHost ? "End Meeting" : "Leave Meeting"}
               >
                 <PhoneOffIcon
                   className={cn(
