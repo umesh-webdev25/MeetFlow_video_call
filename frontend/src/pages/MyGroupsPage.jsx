@@ -88,7 +88,7 @@ const MyGroupsPage = () => {
       <div className="flex items-center justify-between mb-6 bg-base-100 border border-base-300 rounded-2xl px-6 py-5 shadow-sm">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-            <GroupIcon className="w-6 h-6" />
+            <UsersIcon className="w-6 h-6" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-base-content">My Groups</h1>

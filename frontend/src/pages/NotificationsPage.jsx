@@ -39,7 +39,7 @@ const NotificationsPage = () => {
   const acceptedRequests = friendRequests?.acceptedReqs || [];
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl mx-auto space-y-10">
+    <div className="p-6 sm:p-8 max-w-4xl mx-auto space-y-10">
       <Helmet>
         <title>Notifications | MeetFlow</title>
       </Helmet>
@@ -54,16 +54,14 @@ const NotificationsPage = () => {
             Stay updated with your professional network
           </p>
         </div>
-        <BellIcon className="size-5 text-base-content/30 self-start sm:self-auto" />
-      </div>
-
-      <div className="flex justify-end">
+        <div className="flex justify-end">
         <button 
           onClick={() => markAllAsRead()}
-          className="btn btn-sm btn-ghost text-primary hover:bg-primary/10"
+          className="btn btn-sm btn-ghost text-primary hover:bg-primary/10 -mt-4"
         >
           Mark all as read
         </button>
+      </div>
       </div>
 
       {/* LOADING */}
@@ -189,7 +187,7 @@ const NotificationsPage = () => {
           {/* GENERAL NOTIFICATIONS */}
           {notifications.length > 0 && (
             <section className="space-y-4">
-              <h2 className="text-xs font-semibold text-base-content/50 uppercase tracking-widest">
+              <h2 className="text-xs font-semibold text-base-content/50 uppercase tracking-widest -mt-6 ml-4">
                 All Notifications
               </h2>
 
