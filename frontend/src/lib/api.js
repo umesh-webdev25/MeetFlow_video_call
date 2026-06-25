@@ -44,9 +44,7 @@ export const getAuthUser = async () => {
     return null;
   }
 };
-// lib/api.js
 export const completeOnboarding = (formData) => {
-  // ✅ must match exactly what's registered in your routes
   return axiosInstance.post("/auth/onboarding", formData);
 };
 
