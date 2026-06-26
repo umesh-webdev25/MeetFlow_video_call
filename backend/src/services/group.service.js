@@ -117,7 +117,10 @@ export const createGroup = async (groupData) => {
 export const getAllGroups = async (userId, includeDeleted = false) => {
   try {
     const query = {
-      "members.userId": userId,
+      $or: [
+        { admins: userId },
+        { members: { $elemMatch: { userId: userId, role: "admin" } } }
+      ]
     };
     if (!includeDeleted) {
       query.isDeleted = { $ne: true };
