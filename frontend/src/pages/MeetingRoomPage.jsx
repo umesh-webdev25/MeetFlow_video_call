@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import useAuthUser from "../hooks/useAuthUser";
 import { useQuery } from "@tanstack/react-query";
-import { getStreamToken } from "../lib/api";
+import { getStreamToken, getMeeting } from "../lib/api";
 import {
   StreamVideo,
   StreamVideoClient,
@@ -53,7 +53,7 @@ const MeetingRoomPage = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const isHost = location.state?.isHost || false;
+  const isHostFromState = location.state?.isHost || false;
 
   const [client, setClient] = useState(null);
   const [call, setCall] = useState(null);
@@ -83,6 +83,16 @@ const MeetingRoomPage = () => {
     queryFn: getStreamToken,
     enabled: !!authUser,
   });
+
+  const { data: meetingData } = useQuery({
+    queryKey: ["meeting", roomId],
+    queryFn: () => getMeeting(roomId),
+    enabled: !!roomId && !!authUser,
+  });
+
+  const isHost = meetingData
+    ? (meetingData.hostId === authUser?._id || meetingData.hostId?._id === authUser?._id)
+    : isHostFromState;
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
@@ -193,20 +203,21 @@ const MeetingRoomPage = () => {
   };
 
   const handleEndCall = async (endForEveryone) => {
+    const code = activeMeeting?.meetingCode || meetingData?.meetingCode;
     if (endForEveryone && callRef.current) {
       setEndedByHost(true);
-      if (activeMeeting?.meetingCode) {
+      if (code) {
         try {
-          await handleEndMeeting(activeMeeting.meetingCode);
+          await handleEndMeeting(code);
         } catch (err) {
           console.error("Failed to end group meeting record:", err);
         }
       }
       await callRef.current.endCall();
     } else if (callRef.current) {
-      if (activeMeeting?.meetingCode) {
+      if (code) {
         try {
-          await leaveGroupMeetingWithCode(activeMeeting.meetingCode);
+          await leaveGroupMeetingWithCode(code);
         } catch (err) {
           console.error("Failed to leave group meeting record:", err);
         }
@@ -217,9 +228,10 @@ const MeetingRoomPage = () => {
   };
 
   useEffect(() => {
+    const code = activeMeeting?.meetingCode || meetingData?.meetingCode;
     const handleBeforeUnload = () => {
-      if (activeMeeting?.meetingCode) {
-        navigator.sendBeacon(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/meetings/group/${activeMeeting.meetingCode}/leave`);
+      if (code) {
+        navigator.sendBeacon(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/meetings/group/${code}/leave`);
       }
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -227,7 +239,7 @@ const MeetingRoomPage = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       handleBeforeUnload(); // Call on unmount
     };
-  }, [activeMeeting?.meetingCode]);
+  }, [activeMeeting?.meetingCode, meetingData?.meetingCode]);
 
   if (endedByHost) {
     return (
@@ -917,9 +929,12 @@ const MeetingRoomContent = ({
           {showLeaveModal && (
             <LeaveMeetingModal
               isHost={isHost}
-              onConfirm={(endForEveryone) => {
-                onEndCall(endForEveryone);
-                navigate("/meeting/lobby");
+              onConfirm={async (endForEveryone) => {
+                setShowLeaveModal(false);
+                await onEndCall(endForEveryone);
+                if (!endForEveryone) {
+                  navigate("/meeting/lobby");
+                }
               }}
               onCancel={() => setShowLeaveModal(false)}
             />

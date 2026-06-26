@@ -93,34 +93,37 @@ const LeaveMeetingModal = ({ onConfirm, onCancel, isHost }) => {
         {/* TITLE */}
         <motion.div variants={itemVariants} className="text-center space-y-1.5 mb-6">
           <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-            Leave Meeting?
+            {isHost ? "End Meeting?" : "Leave Meeting?"}
           </h3>
           <p className="text-sm text-white/40 font-medium leading-relaxed">
-            Choose how you want to leave this meeting.
-            {isHost && " As the host, you can end it for everyone."}
+            {isHost 
+              ? "Disconnect all participants and end the call immediately." 
+              : "Exit this meeting. Other participants will remain connected."}
           </p>
         </motion.div>
 
         {/* OPTIONS */}
         <motion.div variants={itemVariants} className="space-y-2.5">
           {/* LEAVE FOR ME */}
-          <button
-            onClick={() => confirmLeave(false)}
-            className="w-full group flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 transition-all text-left"
-          >
-            <div className="size-10 rounded-xl bg-white/5 group-hover:bg-white/10 flex items-center justify-center shrink-0 transition-colors">
-              <LogOutIcon className="size-5 text-white/60 group-hover:text-white/90 transition-colors" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-white group-hover:text-white/90 transition-colors">
-                Leave for me
-              </p>
-              <p className="text-xs text-white/30 group-hover:text-white/40 transition-colors mt-0.5">
-                You leave; others stay in the meeting
-              </p>
-            </div>
-            <ChevronRightIcon className="size-4 text-white/20 group-hover:text-white/40 transition-colors shrink-0" />
-          </button>
+          {!isHost && (
+            <button
+              onClick={() => confirmLeave(false)}
+              className="w-full group flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 transition-all text-left"
+            >
+              <div className="size-10 rounded-xl bg-white/5 group-hover:bg-white/10 flex items-center justify-center shrink-0 transition-colors">
+                <LogOutIcon className="size-5 text-white/60 group-hover:text-white/90 transition-colors" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-white group-hover:text-white/90 transition-colors">
+                  Leave for me
+                </p>
+                <p className="text-xs text-white/30 group-hover:text-white/40 transition-colors mt-0.5">
+                  You leave; others stay in the meeting
+                </p>
+              </div>
+              <ChevronRightIcon className="size-4 text-white/20 group-hover:text-white/40 transition-colors shrink-0" />
+            </button>
+          )}
 
           {/* END FOR EVERYONE (host only) */}
           {isHost && (
