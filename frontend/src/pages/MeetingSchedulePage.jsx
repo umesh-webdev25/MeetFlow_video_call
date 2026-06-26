@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,12 +12,16 @@ import {
   ArrowRightIcon,
 } from "lucide-react";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import useAuthUser from "../hooks/useAuthUser";
 
 import {
   getUserFriends,
   createScheduleMeeting,
   getScheduleMeetings,
+  getMyGroups,
 } from "../lib/api";
 
 import toast from "react-hot-toast";
@@ -33,8 +37,35 @@ const MeetingSchedulePage = () => {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [groupId, setGroupId] = useState("");
   const [selectedInvitees, setSelectedInvitees] = useState([]);
   const [showForm, setShowForm] = useState(true);
+
+  const selectedDate = useMemo(() => {
+    if (date && time) {
+      const [year, month, day] = date.split("-").map(Number);
+      const [hours, minutes] = time.split(":").map(Number);
+      return new Date(year, month - 1, day, hours, minutes);
+    }
+    return null;
+  }, [date, time]);
+
+  const handleDateChange = (newDate) => {
+    if (!newDate) {
+      setDate("");
+      setTime("");
+      return;
+    }
+
+    const year = newDate.getFullYear();
+    const month = String(newDate.getMonth() + 1).padStart(2, "0");
+    const day = String(newDate.getDate()).padStart(2, "0");
+    setDate(`${year}-${month}-${day}`);
+
+    const hours = String(newDate.getHours()).padStart(2, "0");
+    const minutes = String(newDate.getMinutes()).padStart(2, "0");
+    setTime(`${hours}:${minutes}`);
+  };
 
   // ==========================
   // GET FRIENDS
@@ -42,6 +73,14 @@ const MeetingSchedulePage = () => {
   const { data: friends = [] } = useQuery({
     queryKey: ["friends"],
     queryFn: getUserFriends,
+  });
+
+  // ==========================
+  // GET GROUPS
+  // ==========================
+  const { data: myGroups = [] } = useQuery({
+    queryKey: ["myGroups"],
+    queryFn: getMyGroups,
   });
 
   // ==========================
@@ -68,6 +107,7 @@ const MeetingSchedulePage = () => {
       setTitle("");
       setDate("");
       setTime("");
+      setGroupId("");
       setSelectedInvitees([]);
       setShowForm(false);
     },
@@ -100,13 +140,22 @@ const MeetingSchedulePage = () => {
       return;
     }
 
+    if (!groupId) {
+      toast.error("Please select a group");
+      return;
+    }
+
     if (!date || !time) {
       toast.error("Please select date and time");
       return;
     }
 
+    const scheduledAt = new Date(`${date}T${time}:00`).toISOString();
+
     scheduleMutation.mutate({
       title: title.trim(),
+      groupId,
+      scheduledAt,
       date,
       time,
       status: "pending",
@@ -185,40 +234,54 @@ const MeetingSchedulePage = () => {
                 />
               </div>
 
-              {/* DATE */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs font-bold text-base-content/50 uppercase tracking-wider block mb-1.5">
-                    Date
-                  </label>
+              {/* SELECT GROUP */}
+              <div>
+                <label className="text-xs font-bold text-base-content/50 uppercase tracking-wider block mb-1.5">
+                  Select Group
+                </label>
 
-                  <input
-                    type="date"
-                    value={date}
-                    onChange={(e) =>
-                      setDate(e.target.value)
-                    }
-                    min={
-                      new Date()
-                        .toISOString()
-                        .split("T")[0]
-                    }
-                    className="input input-bordered bg-base-200/50 border-base-300 w-full rounded-xl"
-                  />
-                </div>
+                <select
+                  required
+                  value={groupId}
+                  onChange={(e) => setGroupId(e.target.value)}
+                  className="select select-bordered bg-base-200/50 border-base-300 w-full rounded-xl font-medium focus:outline-none"
+                >
+                  <option value="" disabled>
+                    Select a group
+                  </option>
 
-                <div>
-                  <label className="text-xs font-bold text-base-content/50 uppercase tracking-wider block mb-1.5">
-                    Time
-                  </label>
+                  {myGroups.map((group) => (
+                    <option
+                      key={group.groupId}
+                      value={group.groupId}
+                    >
+                      {group.groupName}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                  <input
-                    type="time"
-                    value={time || ""}
-                    onChange={(e) =>
-                      setTime(e.target.value)
-                    }
-                    className="input input-bordered bg-base-200/50 border-base-300 w-full rounded-xl"
+              {/* DATE & TIME */}
+              <div>
+                <label className="text-xs font-bold text-base-content/50 uppercase tracking-wider block mb-1.5">
+                  Date & Time
+                </label>
+
+                <div className="relative">
+                  <CalendarIcon className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-base-content/40 w-4 h-4 z-10 pointer-events-none" />
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    timeCaption="Time"
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    placeholderText="Select date and time"
+                    className="input input-bordered bg-base-200/50 border-base-300 w-full pl-10 pr-4 py-3 rounded-xl text-sm focus:outline-none focus:border-primary cursor-pointer"
+                    popperClassName="react-datepicker-popper"
+                    popperPlacement="bottom-start"
+                    required
                   />
                 </div>
               </div>

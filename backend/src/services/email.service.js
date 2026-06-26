@@ -13,8 +13,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-console.log("EMAIL:", process.env.EMAIL_USER);
-console.log("PASS:", process.env.EMAIL_PASS);
+// console.log("EMAIL:", process.env.EMAIL_USER);
+// console.log("PASS:", process.env.EMAIL_PASS);
 
 /**
  * Send OTP email to user

@@ -19,6 +19,9 @@ import {
   XIcon,
 } from "lucide-react";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import {
   getScheduleMeetings,
   createScheduleMeeting,
@@ -75,6 +78,42 @@ const ScheduleMeetingPage = () => {
       groupId: "",
       status: "upcoming",
     });
+
+  const selectedDate = useMemo(() => {
+    if (meetingData.date && meetingData.time) {
+      const [year, month, day] = meetingData.date.split("-").map(Number);
+      const [hours, minutes] = meetingData.time.split(":").map(Number);
+      return new Date(year, month - 1, day, hours, minutes);
+    }
+    return null;
+  }, [meetingData.date, meetingData.time]);
+
+  const handleDateChange = (date) => {
+    if (!date) {
+      setMeetingData((prev) => ({
+        ...prev,
+        date: "",
+        time: "",
+      }));
+      return;
+    }
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const dateStr = `${year}-${month}-${day}`;
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const timeStr = `${hours}:${minutes}`;
+
+    setMeetingData((prev) => ({
+      ...prev,
+      date: dateStr,
+      time: timeStr,
+    }));
+  };
+
 
   // ─────────────────────────────────────────────
   // FETCH
@@ -967,46 +1006,29 @@ const ScheduleMeetingPage = () => {
                 </select>
               </div>
 
-              {/* Date */}
+              {/* Date & Time */}
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Date
+                  Date & Time
                 </label>
 
-                <input
-                  required
-                  type="date"
-                  value={meetingData.date}
-                  onChange={(e) =>
-                    setMeetingData({
-                      ...meetingData,
-                      date: e.target.value,
-                    })
-                  }
-                  className="w-full rounded-xl border border-base-300 bg-base-100 text-base-content px-4 py-3 text-sm focus:outline-none focus:border-primary"
-                  style={{ colorScheme: "dark" }}
-                />
-              </div>
-
-              {/* Time */}
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Time
-                </label>
-
-                <input
-                  required
-                  type="time"
-                  value={meetingData.time}
-                  onChange={(e) =>
-                    setMeetingData({
-                      ...meetingData,
-                      time: e.target.value,
-                    })
-                  }
-                  className="w-full rounded-xl border border-base-300 bg-base-100 text-base-content px-4 py-3 text-sm focus:outline-none focus:border-primary"
-                  style={{ colorScheme: "dark" }}
-                />
+                <div className="relative">
+                  <CalendarIcon className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-base-content/40 w-4 h-4 z-10 pointer-events-none" />
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    timeCaption="Time"
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    placeholderText="Select date and time"
+                    className="w-full rounded-xl border border-base-300 bg-base-100 text-base-content pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-primary cursor-pointer"
+                    popperClassName="react-datepicker-popper"
+                    popperPlacement="bottom-start"
+                    required
+                  />
+                </div>
               </div>
 
               {/* Status */}
