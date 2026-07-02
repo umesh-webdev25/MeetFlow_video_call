@@ -25,7 +25,7 @@ async function setupEtherealEmail() {
     console.log(`EMAIL_USER="${testAccount.user}"`);
     console.log(`EMAIL_PASSWORD="${testAccount.pass}"`);
     console.log(`EMAIL_FROM="MeetFlow <noreply@MeetFlow.com>"`);
-    console.log(`FRONTEND_URL="http://localhost:5173"`);
+    console.log(`FRONTEND_URL="http://localhost:3000"`);
     console.log(`NODE_ENV="development"`);
     console.log("=".repeat(60));
 
@@ -44,7 +44,7 @@ EMAIL_HOST="smtp.ethereal.email"
 EMAIL_USER="${testAccount.user}"
 EMAIL_PASSWORD="${testAccount.pass}"
 EMAIL_FROM="MeetFlow <noreply@MeetFlow.com>"
-FRONTEND_URL="http://localhost:5173"
+FRONTEND_URL="http://localhost:3000"
 `;
 
     // Remove old email config if exists

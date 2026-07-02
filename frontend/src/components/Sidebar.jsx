@@ -124,10 +124,13 @@ const Sidebar = () => {
       {/* NAVIGATION */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
+          const fullPath = location.pathname + location.search;
           const isActive =
             item.path === "/"
               ? currentPath === "/"
-              : currentPath.startsWith(item.path);
+              : item.path.includes("?") 
+                ? fullPath === item.path
+                : currentPath.startsWith(item.path);
 
           return (
             <Link

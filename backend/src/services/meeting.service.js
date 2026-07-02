@@ -61,7 +61,7 @@ class MeetingService {
       waitingRoomEnabled: data.waitingRoomEnabled || false,
     });
 
-    const inviteLink = `${process.env.FRONTEND_URL || "http://localhost:5173"}/meeting/room/${roomId}`;
+    const inviteLink = `${process.env.FRONTEND_URL || "http://localhost:3000"}/meeting/room/${roomId}`;
     const refreshToken = await authService.createMeetingSession(userId, meeting._id, reqInfo || {});
 
     return {
