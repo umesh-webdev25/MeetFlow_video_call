@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState, useRef, } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
 import {
   SendIcon,
   MessageSquareIcon,
@@ -95,12 +95,10 @@ const InCallChatPanel = ({ roomId, authUser, tokenData, onUnreadChange, isMobile
           setIsLoading(false);
 
           currChannel.on("message.new", (event) => {
-            if (event.user?.id !== authUser._id) {
-              setMessages((prev) => {
-                const exists = prev.some((m) => m.id === event.message.id);
-                return exists ? prev : [...prev, event.message];
-              });
-            }
+            setMessages((prev) => {
+              const exists = prev.some((m) => m.id === event.message.id);
+              return exists ? prev : [...prev, event.message];
+            });
           });
 
           currChannel.on("message.updated", (event) => {
@@ -136,7 +134,7 @@ const InCallChatPanel = ({ roomId, authUser, tokenData, onUnreadChange, isMobile
           const stateMessages = currChannel.state.messages || [];
           setMessages(stateMessages);
         }
-      } catch (err) {
+      } catch  {
         if (mounted) {
           setError("Could not connect to chat");
           setIsLoading(false);
@@ -178,13 +176,16 @@ const InCallChatPanel = ({ roomId, authUser, tokenData, onUnreadChange, isMobile
     try {
       setIsUploading(true);
       const msg = await ch.sendMessage(msgData);
-      setMessages((prev) => [...prev, msg.message]);
+      setMessages((prev) => {
+        const exists = prev.some((m) => m.id === msg.message.id);
+        return exists ? prev : [...prev, msg.message];
+      });
       setInputValue("");
       setAttachments([]);
       setReplyTo(null);
       setIsUploading(false);
       ch.stopTyping();
-    } catch (err) {
+    } catch  {
       setIsUploading(false);
     }
   };
@@ -226,39 +227,34 @@ const InCallChatPanel = ({ roomId, authUser, tokenData, onUnreadChange, isMobile
   const handleFileSelect = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
+    const ch = channelRef.current;
+    if (!ch) return;
 
-    for (const file of files) {
-      if (file.size > 10 * 1024 * 1024) {
-        continue;
+    setIsUploading(true);
+    try {
+      for (const file of files) {
+        if (file.size > 10 * 1024 * 1024) continue; // 10MB limit
+
+        const isImage = file.type.startsWith("image/");
+        const response = isImage 
+          ? await ch.sendImage(file)
+          : await ch.sendFile(file);
+
+        setAttachments((prev) => [
+          ...prev,
+          {
+            type: isImage ? "image" : "file",
+            fallback: file.name,
+            [isImage ? "image_url" : "asset_url"]: response.file,
+            file_size: file.size,
+            mime_type: file.type,
+          },
+        ]);
       }
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const dataUrl = ev.target.result;
-        if (file.type.startsWith("image/")) {
-          setAttachments((prev) => [
-            ...prev,
-            {
-              type: "image",
-              fallback: file.name,
-              image_url: dataUrl,
-              file_size: file.size,
-              mime_type: file.type,
-            },
-          ]);
-        } else {
-          setAttachments((prev) => [
-            ...prev,
-            {
-              type: "file",
-              fallback: file.name,
-              file_size: file.size,
-              mime_type: file.type,
-              asset_url: dataUrl,
-            },
-          ]);
-        }
-      };
-      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error("Upload error:", err);
+    } finally {
+      setIsUploading(false);
     }
     e.target.value = "";
   };
