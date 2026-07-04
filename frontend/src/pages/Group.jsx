@@ -510,7 +510,7 @@ const Group = () => {
       </div>
 
       {/* ── STAT CARDS ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 mb-8">
         {[
           {
             label: "Total Groups",
@@ -582,8 +582,8 @@ const Group = () => {
               transition-all duration-300
             "
           >
-            <div className={`w-16 h-16 sm:w-20 sm:h-20 border-xs rounded-[16px] ${card.bg} flex items-center justify-center flex-shrink-0 mr-4 sm:mr-5`}>
-              <card.icon className={`w-7 h-7 sm:w-8 sm:h-8 ${card.color}`} />
+            <div className={`w-14 h-14 sm:w-16 sm:h-16 border-xs rounded-[16px] ${card.bg} flex items-center justify-center flex-shrink-0 mr-4`}>
+              <card.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${card.color}`} />
             </div>
 
             <div className="flex flex-col min-w-0">
@@ -594,7 +594,7 @@ const Group = () => {
                 {card.value}
               </h2>
 
-              <div className="flex items-center text-[11px] sm:text-[12px] font-bold whitespace-nowrap">
+              <div className="flex items-center text-[11px] sm:text-[12px] font-bold flex-wrap mt-1">
                 {card.trend === "up" && (
                   <span className="text-emerald-500 flex items-center gap-1">
                     <ArrowUpIcon className="w-3 h-3" strokeWidth={3} />

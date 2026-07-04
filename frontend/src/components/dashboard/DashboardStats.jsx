@@ -100,7 +100,7 @@ const DashboardStats = ({ stats }) => {
           whileHover={{ y: -2 }}
           transition={{ duration: 0.2 }}
           className="
-  w-[380px]
+  w-full
   min-h-[120px]
   lg:min-h-[150px]
   bg-base-200

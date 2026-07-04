@@ -201,7 +201,7 @@ const HomePage = () => {
               </motion.div>
             </div> */}
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 ">
+            <div className="grid grid-cols-2 gap-8">
               <motion.div variants={itemVariants}>
                 <RecentGroups
                   groups={groupsData.filter(g => !g.isDeleted)}
@@ -209,7 +209,7 @@ const HomePage = () => {
                 />
               </motion.div>
 
-              <motion.div variants={itemVariants} className="lg:ml-6">
+              <motion.div variants={itemVariants}>
                 <ContactsOverview
                   contacts={contactsData.filter(c => !c.isDeleted)}
                   onDelete={handleDeleteContact}

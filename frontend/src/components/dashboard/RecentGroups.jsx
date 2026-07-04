@@ -38,7 +38,7 @@ const RecentGroups = ({ groups = [], onDelete }) => {
     ) || [];
 
   return (
-    <section className="w-[800px] max-w-5xl mx-auto border border-base-300 rounded-2xl bg-base-200/50 backdrop-blur-sm p-6 shadow-sm -mt-4">
+    <section className="w-full mx-auto border border-base-300 rounded-2xl bg-base-200/50 backdrop-blur-sm p-4 sm:p-6 shadow-sm -mt-4">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -50,7 +50,7 @@ const RecentGroups = ({ groups = [], onDelete }) => {
           </h2>
         </div>
         <button
-          onClick={() => navigate('/groups')}
+          onClick={() => navigate('/group')}
           className="text-sm font-bold text-primary flex items-center gap-1.5 group hover:text-primary-focus transition-colors"
         >
           View All
