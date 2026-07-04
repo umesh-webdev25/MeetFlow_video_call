@@ -15,6 +15,7 @@ import { CalendarIcon } from "lucide-react";
 import ProfileImage from "../components/ProfileImage.jsx";
 import useAuthUser from "../hooks/useAuthUser";
 import { useSocketStore } from "../store/useSocketStore";
+import { useThemeStore } from "../store/useThemeStore";
 import { capitalize, cn } from "../lib/utils";
 import Skeleton from "../components/ui/Skeleton";
 import { Helmet } from "react-helmet-async";
@@ -85,13 +86,14 @@ const DUMMY_NOTIFS = [
 
 const HomePage = () => {
   const { authUser } = useAuthUser();
+  const { theme } = useThemeStore();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { socket } = useSocketStore();
 
   useEffect(() => {
     if (!socket) return;
-    
+
     const handleActiveMeetingsUpdate = () => {
       queryClient.invalidateQueries(["activeMeetings"]);
     };
@@ -115,13 +117,13 @@ const HomePage = () => {
   });
 
   const handleDeleteGroup = (groupId) => {
-    if(window.confirm("Are you sure you want to delete this group?")) {
+    if (window.confirm("Are you sure you want to delete this group?")) {
       deleteGroupMutation.mutate(groupId);
     }
   };
 
   const handleDeleteContact = (contactId) => {
-    if(window.confirm("Are you sure you want to delete this contact?")) {
+    if (window.confirm("Are you sure you want to delete this contact?")) {
       deleteContactMutation.mutate(contactId);
     }
   };
@@ -152,7 +154,7 @@ const HomePage = () => {
     refetchInterval: 10000, // Poll every 10 seconds to keep UI synced with meeting status
   });
 
-  console.log("activeMeetingsData",activeMeetingsData);
+  console.log("activeMeetingsData", activeMeetingsData);
 
 
   const upcomingMeetings = scheduledMeetingsData.filter(m => new Date(m.scheduledAt) > new Date() && m.status !== "completed");
@@ -179,13 +181,13 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-100 font-sans">
+    <div className="h-full font-sans">
       <Helmet>
         <title>Dashboard | MeetFlow</title>
       </Helmet>
 
-      <div className="flex">
-        <div className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 xl:p-10 max-w-8xl mx-auto w-full">
+      <div className="flex bg-base-100">
+        <div className={cn("flex-1 min-w-0 p-4 sm:p-6 lg:p-8 xl:p-10 max-w-8xl mx-auto w-full", theme === "MeetFlow-pro" ? "bg-[#f8fafc]" : "bg-base-200")}>
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -193,7 +195,7 @@ const HomePage = () => {
             className="space-y-10 sm:space-y-10"
           >
             {/* EXACT PRESERVED HERO SECTION FROM USER CODE (MINUS THE STATS CARDS WHICH ARE NOW DashboardStats) */}
-            <motion.section
+            {/* <motion.section
               variants={itemVariants}
               className="rounded-2xl border border-base-300 bg-base-100 p-2 sm:p-8 lg:p-6 shadow-sm"
             >
@@ -218,43 +220,49 @@ const HomePage = () => {
                   Schedule
                 </button>
               </div>
-            </motion.section>
+            </motion.section> */}
 
             {/* NEW DASHBOARD SECTIONS */}
             <motion.div variants={itemVariants}>
               <DashboardStats stats={stats} />
             </motion.div>
 
-            <motion.div variants={itemVariants}>
+            {/* <motion.div variants={itemVariants}>
               <QuickActions navigate={navigate} />
-            </motion.div>
+            </motion.div> */}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <motion.div variants={itemVariants} className="lg:col-span-2">
                   <ActiveMeetings meetings={activeMeetingsData} />
                 </motion.div>
               <motion.div variants={itemVariants} className="lg:col-span-1">
                 <ActivityTimeline activities={DUMMY_ACTIVITIES} />
               </motion.div>
-            </div>
+            </div> */}
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 ">
               <motion.div variants={itemVariants}>
-                <RecentGroups groups={groupsData.filter(g => !g.isDeleted)} onDelete={handleDeleteGroup} />
+                <RecentGroups
+                  groups={groupsData.filter(g => !g.isDeleted)}
+                  onDelete={handleDeleteGroup}
+                />
               </motion.div>
-              <motion.div variants={itemVariants}>
-                <ContactsOverview contacts={contactsData.filter(c => !c.isDeleted)} onDelete={handleDeleteContact} />
+
+              <motion.div variants={itemVariants} className="lg:ml-6">
+                <ContactsOverview
+                  contacts={contactsData.filter(c => !c.isDeleted)}
+                  onDelete={handleDeleteContact}
+                />
               </motion.div>
             </div>
-
             {/* <motion.div variants={itemVariants}>
               <AnalyticsCharts growthData={DUMMY_GROWTH_DATA} sessionData={DUMMY_SESSION_DATA} />
             </motion.div> */}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <motion.div variants={itemVariants} className="lg:col-span-1">
+              {/* <motion.div variants={itemVariants} className="lg:col-span-1">
                 <NotificationsPanel notifications={DUMMY_NOTIFS} />
-              </motion.div>
+              </motion.div> */}
               {/* <motion.div variants={itemVariants} className="lg:col-span-2 flex flex-col justify-end">
                 <DashboardSummary summary={summary} />
               </motion.div> */}

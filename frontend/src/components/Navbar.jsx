@@ -1,21 +1,18 @@
 import { Link, useLocation } from "react-router-dom";
 import useAuthUser from "../hooks/useAuthUser";
-import { BellIcon, LogOutIcon, MoonIcon, ShipWheelIcon, SunIcon } from "lucide-react";
-import useLogout from "../hooks/useLogout";
-import { useThemeStore } from "../store/useThemeStore";
+import { BellIcon, ShipWheelIcon, MoonIcon, SunIcon } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useState, useEffect } from "react";
 import SearchModal from "./SearchModal";
-import ProfileImage from "./ProfileImage";
 import { useNotificationStore } from "../store/useNotificationStore";
+import { useThemeStore } from "../store/useThemeStore";
 
 const Navbar = () => {
-  const { authUser, logout } = useAuthUser();
+  const { authUser } = useAuthUser();
+  const { toggleTheme, theme } = useThemeStore();
   const { unreadCount } = useNotificationStore();
   const location = useLocation();
   const isChatPage = location.pathname?.startsWith("/chat");
-  const { toggleTheme, theme } = useThemeStore();
-  const { logoutMutation } = useLogout(); 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -31,50 +28,59 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-base-100 sticky top-0 z-30 h-16 flex items-center border-b border-base-800 px-4 sm:px-6">
-        <div className="w-full flex items-center justify-between">
+      <nav className="top-0 z-30 flex items-center justify-between px-4 sm:px-8 py-5">
+        {/* LEFT — GREETING */}
+        <div className={cn("hidden md:block", isChatPage && "hidden")}>
+          <h1 className="text-4xl font-bold text-base-content flex items-center gap-2 tracking-tight">
+            Welcome back, {authUser?.fullName?.split(" ")[0] || "User"}! <span className="text-xl">👋</span>
+          </h1>
+          <p className="text-sm text-base-content/60 mt-1">
+            Here's what's happening with your groups and contacts today.
+          </p>
+        </div>
 
-          {/* LEFT — LOGO (mobile only, or always on chat page) */}
-          <div className={cn("flex items-center", !isChatPage && "lg:hidden")}>
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className="p-1.5 bg-primary rounded-lg">
-                <ShipWheelIcon className="size-4 text-primary-content" />
-              </div>
-              <span className="text-base font-bold tracking-tight text-base-content">
-                MeetFlow
-              </span>
-            </Link>
-          </div>
+        {/* MOBILE LOGO */}
+        <div className={cn("flex items-center md:hidden", !isChatPage && "lg:hidden")}>
+          <Link to="/" className="flex items-center gap-2.5">
+            <div className="p-1.5 bg-primary rounded-lg">
+              <ShipWheelIcon className="size-4 text-primary-content" />
+            </div>
+            <span className="text-base font-bold tracking-tight text-base-content">
+              MeetFlow
+            </span>
+          </Link>
+        </div>
 
-          {/* RIGHT — ACTIONS */}
-          <div className="flex items-center gap-1.5 sm:gap-2 ml-auto">
+        {/* RIGHT — ACTIONS */}
+        <div className="flex items-center gap-4 ml-auto">
+          {/* SEARCH INPUT */}
+          <button
+            onClick={() => setIsSearchOpen(true)}
+            className="hidden md:flex items-center justify-between w-72 h-11 px-4 bg-base-100 rounded-2xl shadow-sm text-base-content/40 hover:bg-base-200/50 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span className="text-[14px]">Search anything...</span>
+            </div>
+            <kbd className="inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-medium text-base-content/50 bg-base-200/50 border border-base-200 rounded-md">
+              ⌘ K
+            </kbd>
+          </button>
 
-            {/* SEARCH TRIGGER */}
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-base-200 border border-base-300 rounded-lg text-base-content/40 hover:text-base-content/70 hover:bg-base-300/50 transition-colors"
-            >
-              <span className="text-xs font-medium">Search...</span>
-              <kbd className="kbd kbd-xs bg-base-100 border-base-300 font-sans text-[10px]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                  <path d="M21 21l-6 -6" />
-                </svg>
-              </kbd>
+          {/* NOTIFICATIONS */}
+          <Link to="/notifications" className="relative">
+            <button className="flex items-center justify-center size-11 rounded-full bg-base-100 shadow-sm text-base-content/70 hover:bg-base-200/50 transition-colors">
+              <BellIcon className="size-5" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex size-[18px] items-center justify-center rounded-full bg-error text-[10px] font-bold text-white ring-2 ring-base-100">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
             </button>
-
-            {/* NOTIFICATIONS */}
-            <Link to="/notifications" className="relative">
-              <button className="btn btn-ghost btn-sm btn-circle hover:bg-base-200 text-base-content/50 hover:text-base-content transition-colors">
-                <BellIcon className="size-4.5" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-error px-1 text-[10px] font-bold text-white ring-2 ring-base-100">
-                    {unreadCount > 99 ? '99+' : unreadCount}
-                  </span>
-                )}
-              </button>
-            </Link>
+          </Link>
 
             {/* THEME TOGGLE */}
             <button
@@ -86,18 +92,7 @@ const Navbar = () => {
               ) : (
                 <SunIcon className="size-4.5" />
               )}
-            </button>
-
-            {/* <div className="w-px h-5 bg-base-300 mx-1 hidden sm:block" /> */}
-
-            {/* <Link to="/settings?tab=profile" className="size-8 rounded-lg overflow-hidden ring-1 ring-base-300">
-              <ProfileImage
-                src={authUser?.profilePic}
-                alt="User Avatar"
-                className="w-full h-full"
-              />
-            </Link> */}
-          </div>
+          </button>
         </div>
       </nav>
 
