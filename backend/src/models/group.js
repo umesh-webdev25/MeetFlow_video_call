@@ -38,17 +38,19 @@ const groupSchema = new mongoose.Schema(
       {
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
+          ref: "User"
+        },
+        contactId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Contact"
         },
         role: {
           type: String,
           enum: ["admin", "member"],
-          default: "member",
-        },
-      },
+          default: "member"
+        }
+      }
     ],
-
     // Separate Admins Array
     admins: [
       {

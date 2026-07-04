@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState, useEffect } from "react";
+import {useEffect } from "react";
 import {
   getAllGroups,
   getAllContacts,
@@ -16,7 +16,7 @@ import ProfileImage from "../components/ProfileImage.jsx";
 import useAuthUser from "../hooks/useAuthUser";
 import { useSocketStore } from "../store/useSocketStore";
 import { useThemeStore } from "../store/useThemeStore";
-import { capitalize, cn } from "../lib/utils";
+import { cn } from "../lib/utils";
 import Skeleton from "../components/ui/Skeleton";
 import { Helmet } from "react-helmet-async";
 
@@ -44,45 +44,7 @@ const itemVariants = {
   visible: { y: 0, opacity: 1, transition: { duration: 0.3 } },
 };
 
-const groups = [
-  { id: 1, name: "Developers", members: 3, status: "active", date: "2 days ago" },
-  { id: 2, name: "Design Team", members: 1, status: "active", date: "1 week ago" },
-  { id: 3, name: "Marketing", members: 0, status: "inactive", date: "1 month ago" },
-  { id: 4, name: "Support", members: 0, status: "inactive", date: "2 months ago" },
-];
 
-const contacts = [
-  { id: 1, name: "Umesh", email: "umesh@example.com", status: "online", avatar: "/avatar.png" },
-  { id: 2, name: "Rahul", email: "rahul@example.com", status: "offline", avatar: "/avatar.png" },
-  { id: 3, name: "Aman", email: "aman@example.com", status: "online", avatar: "/avatar.png" },
-];
-
-
-
-// Dummy data for new sections
-const DUMMY_ACTIVITIES = [
-  { type: "meeting_start", title: "Meeting Started", desc: "You joined 'Spanish Practice'", time: "10 mins ago" },
-  { type: "contact", title: "Contact Added", desc: "You added 'Aman' to contacts", time: "2 hours ago" },
-  { type: "group", title: "Group Created", desc: "You created 'Design Team'", time: "Yesterday" },
-  { type: "message", title: "Message Sent", desc: "Sent a message in 'Developers'", time: "2 days ago" },
-];
-
-const DUMMY_GROWTH_DATA = [
-  { name: 'Mon', groups: 2, contacts: 4 }, { name: 'Tue', groups: 3, contacts: 5 },
-  { name: 'Wed', groups: 5, contacts: 8 }, { name: 'Thu', groups: 6, contacts: 10 },
-  { name: 'Fri', groups: 8, contacts: 12 }, { name: 'Sat', groups: 9, contacts: 15 }, { name: 'Sun', groups: 12, contacts: 18 }
-];
-
-const DUMMY_SESSION_DATA = [
-  { name: 'Week 1', sessions: 10, messages: 45 }, { name: 'Week 2', sessions: 14, messages: 65 },
-  { name: 'Week 3', sessions: 8, messages: 30 }, { name: 'Week 4', sessions: 18, messages: 90 }
-];
-
-const DUMMY_NOTIFS = [
-  { type: "meeting", title: "Meeting Reminder", desc: "Design Sync starts in 15 mins", time: "15 mins ago", read: false },
-  { type: "group", title: "Group Update", desc: "Developers group name changed", time: "2 hours ago", read: false },
-  { type: "system", title: "System Update", desc: "New dashboard features added", time: "1 day ago", read: true },
-];
 
 const HomePage = () => {
   const { authUser } = useAuthUser();
@@ -179,7 +141,6 @@ const HomePage = () => {
     sessions: sessionsData.length || 0,
     messages: 0 // TODO: Connect messages API
   };
-
   return (
     <div className="h-full font-sans">
       <Helmet>

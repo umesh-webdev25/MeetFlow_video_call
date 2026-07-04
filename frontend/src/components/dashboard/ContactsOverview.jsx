@@ -29,7 +29,7 @@ const ContactsOverview = ({ contacts = [], onDelete }) => {
           <div className="p-2 bg-primary/10 rounded-xl">
             <User className="size-5 text-primary" strokeWidth={2.5} />
           </div>
-          <h2 className="text-xl font-black tracking-tight text-base-content">Contacts Overview</h2>
+          <h2 className="text-[25px] font-bold leading-none tracking-tight text-base-content">Contacts Overview</h2>
         </div>
         <button className="flex items-center gap-1.5 text-sm font-bold text-primary group hover:text-primary-focus transition-colors">
           Manage All
@@ -46,10 +46,10 @@ const ContactsOverview = ({ contacts = [], onDelete }) => {
             placeholder="Search contacts..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 bg-base-100 border border-base-300 rounded-xl text-sm font-medium placeholder-base-content/40 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-inner text-base-content"
+            className="w-full pl-11 pr-4 py-2.5 bg-base-200 border border-base-300 rounded-xl text-sm font-medium placeholder-base-content/40 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-inner text-base-content"
           />
         </div>
-        <button className="flex items-center justify-center gap-2 px-4 py-2.5 bg-base-100 border border-base-300 rounded-xl text-sm font-bold text-base-content/70 hover:bg-base-300 hover:text-base-content transition-colors shadow-sm shrink-0">
+        <button className="flex items-center justify-center gap-2 px-4 py-2.5 bg-base-200 border border-base-300 rounded-xl text-sm font-bold text-base-content/70 hover:bg-base-300 hover:text-base-content transition-colors shadow-sm shrink-0">
           <SlidersHorizontal className="size-4" strokeWidth={2.2} />
           Filter
         </button>
@@ -65,7 +65,7 @@ const ContactsOverview = ({ contacts = [], onDelete }) => {
             return (
               <div
                 key={contact._id || idx}
-                className="w-full flex items-center justify-between p-5 bg-base-100 border border-base-300 rounded-2xl shadow-sm hover:shadow-md transition-all
+                className="w-full flex items-center justify-between p-5 bg-base-200 border border-base-300 rounded-2xl shadow-sm hover:shadow-md transition-all
 "
               >
                 {/* Left Side: Profile Photo & Text Stack */}
@@ -112,7 +112,7 @@ const ContactsOverview = ({ contacts = [], onDelete }) => {
             );
           })
         ) : (
-          <div className="col-span-1 md:col-span-2 xl:col-span-3 flex flex-col items-center justify-center py-12 bg-base-100 border border-base-300/60 rounded-xl">
+          <div className="col-span-1 md:col-span-2 xl:col-span-3 flex flex-col items-center justify-center py-12 bg-base-200 border border-base-300/60 rounded-xl">
             <User className="size-8 text-base-content/20 mb-2" />
             <p className="text-sm font-bold text-base-content/50">No contacts found</p>
           </div>

@@ -45,7 +45,7 @@ const RecentGroups = ({ groups = [], onDelete }) => {
           <div className="p-2 bg-primary/10 rounded-xl">
             <Folder className="w-5 h-5 text-primary" strokeWidth={2.5} />
           </div>
-          <h2 className="text-xl font-black tracking-tight text-base-content">
+          <h2 className="text-[25px] font-bold leading-none tracking-tight text-base-content">
             Recent Groups
           </h2>
         </div>
@@ -53,7 +53,7 @@ const RecentGroups = ({ groups = [], onDelete }) => {
           onClick={() => navigate('/groups')}
           className="text-sm font-bold text-primary flex items-center gap-1.5 group hover:text-primary-focus transition-colors"
         >
-          View All 
+          View All
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.5} />
         </button>
       </div>
@@ -68,12 +68,12 @@ const RecentGroups = ({ groups = [], onDelete }) => {
             placeholder="Search groups..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 bg-base-100 border border-base-300 rounded-xl text-sm font-medium placeholder-base-content/40 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-inner"
+            className="w-full pl-11 pr-4 py-2.5 bg-base-200 border border-base-300 rounded-xl text-sm font-medium placeholder-base-content/40 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-inner"
           />
         </div>
 
         {/* Filter Button */}
-        <button className="flex items-center justify-center gap-2 px-4 py-2.5 bg-base-100 border border-base-300 rounded-xl text-sm font-bold text-base-content/70 hover:bg-base-300 hover:text-base-content transition-colors shadow-sm shrink-0">
+        <button className="flex items-center justify-center gap-2 px-4 py-2.5 bg-base-200 border border-base-300 rounded-xl text-sm font-bold text-base-content/70 hover:bg-base-300 hover:text-base-content transition-colors shadow-sm shrink-0">
           <Filter className="w-4 h-4" strokeWidth={2.2} />
           Filter
         </button>
@@ -85,25 +85,24 @@ const RecentGroups = ({ groups = [], onDelete }) => {
           filteredGroups.slice(0, 4).map((group, idx) => {
             const style = CARD_STYLES[idx % 4];
             const status = getStatusDisplay(group.status, idx);
-            const membersList = group.members && group.members.length > 0 ? group.members : [1, 2, 3];
-            const displayMembers = membersList.slice(0, 3);
-            const extraCount = group.members?.length > 3 ? group.members.length - 3 : (group.members ? 0 : [9, 5, 7, 4][idx % 4] || 2);
-            const membersCount = group.members?.length || [12, 8, 10, 6][idx % 4] || 0;
+            const displayMembers = group.members?.slice(0, 3) || [];
+            const extraCount = Math.max((group.members?.length || 0) - 3, 0);
+            const membersCount = group.members?.length || 0;
 
             return (
               <div
                 key={group._id || idx}
-                className="bg-base-100 border border-base-300/70 rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
+                className=" bg-base-200 border border-base-300/70 rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   {/* TOP CARD ROW */}
                   <div className="flex justify-between items-start gap-4 mb-4">
                     <div className={`w-14 w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${style.bg} ${style.text}`}>
                       {group.groupImage || group.image ? (
-                        <img 
-                          src={group.groupImage || group.image} 
-                          alt={group.groupName} 
-                          className="w-full h-full object-cover rounded-xl" 
+                        <img
+                          src={group.groupImage || group.image}
+                          alt={group.groupName}
+                          className="w-full h-full object-cover rounded-xl"
                         />
                       ) : (
                         <style.icon className="w-6 h-6" strokeWidth={2.2} />
@@ -119,7 +118,7 @@ const RecentGroups = ({ groups = [], onDelete }) => {
                       </p>
                     </div>
 
-                    <button 
+                    <button
                       onClick={() => onDelete?.(group._id)}
                       className="text-base-content/30 hover:text-base-content/70 transition-colors p-1.5 rounded-lg hover:bg-base-200 shrink-0"
                     >
@@ -132,12 +131,17 @@ const RecentGroups = ({ groups = [], onDelete }) => {
                     {/* User Stacks */}
                     <div className="flex items-center">
                       <div className="flex -space-x-2">
-                        {displayMembers.map((m, i) => (
+                        {displayMembers.map((member, i) => (
                           <img
-                            key={i}
-                            src={`https://i.pravatar.cc/150?u=${group._id || 'dummy'}${i}`}
-                            alt="Member avatar"
-                            className="w-6 h-6 rounded-full border-2 border-base-100 object-cover bg-base-200"
+                            key={member.userId?._id || i}
+                            src={
+                              member.userId?.profilePic ||
+                              "https://ui-avatars.com/api/?name=" +
+                              encodeURIComponent(member.userId?.fullName || "User")
+                            }
+                            alt={member.userId?.fullName || "Member"}
+                            title={member.userId?.fullName}
+                            className="w-10 h-10 rounded-full border-2 border-base-100 object-cover bg-base-200"
                           />
                         ))}
                       </div>
@@ -163,14 +167,19 @@ const RecentGroups = ({ groups = [], onDelete }) => {
 
                 {/* BOTTOM ACTION ROW */}
                 <div className="flex items-center justify-between pt-3 mt-2 border-t border-base-200">
-                  <span className="text-xs font-bold text-base-content/40">
-                    {membersCount} Members
-                  </span>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-xs font-bold text-base-content/40">
+                      {membersCount} Members
+                    </span>
+                    <span className="text-[10px] font-medium text-base-content/30" title="Created on">
+                      Created: {new Date(group.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                   <button
                     onClick={() => navigate(`/groups/${group._id}`)}
                     className="text-xs font-bold text-primary flex items-center gap-1 hover:text-primary-focus group/btn"
                   >
-                    Open 
+                    Open
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5" strokeWidth={2.5} />
                   </button>
                 </div>
@@ -178,7 +187,7 @@ const RecentGroups = ({ groups = [], onDelete }) => {
             );
           })
         ) : (
-          <div className="col-span-1 md:col-span-2 flex flex-col items-center justify-center py-12 bg-base-100 border border-base-300/60 rounded-xl">
+          <div className="col-span-1 md:col-span-2 flex flex-col items-center justify-center py-12 bg-base-200 border border-base-300/60 rounded-xl">
             <Folder className="w-8 h-8 text-base-content/20 mb-2" />
             <p className="text-sm font-bold text-base-content/50">
               No groups found

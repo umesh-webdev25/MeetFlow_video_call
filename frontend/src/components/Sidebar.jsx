@@ -107,7 +107,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-64 bg-base-100 border-r border-base-800 hidden lg:flex flex-col h-screen sticky top-0 z-40">
+    <aside className="w-64 bg-base-200 border border-base-300 rounded-2xl hidden lg:flex flex-col h-screen sticky top-0 z-40">
       {/* LOGO */}
       <div className="h-16 px-6 flex items-center border-b border-base-200">
         <Link to="/" className="flex items-center gap-2.5">

@@ -104,8 +104,7 @@ const DashboardStats = ({ stats }) => {
   min-h-[120px]
   lg:min-h-[150px]
   bg-base-200
-  border border-base-500/60
-  rounded-[16px]
+  border border-base-300/70 rounded-xl
   p-5
   flex items-center
   shadow-sm
@@ -113,19 +112,19 @@ const DashboardStats = ({ stats }) => {
   transition-all duration-300
 "
         >
-          <div className={`w-20 h-20 border-xs rounded-[16px] ${card.bg} flex items-center justify-center flex-shrink-0 mr-4 sm:mr-5`}>
+          <div className={`w-20 h-20 border-xs rounded-xl ${card.bg} flex items-center justify-center flex-shrink-0 mr-4 sm:mr-5`}>
             <card.icon className={`w-7 h-7 sm:w-8 sm:h-8 ${card.color}`} />
           </div>
 
           <div className="flex flex-col">
-            <p className="text-[13px] sm:text-sm font-medium text-base-content/60 mb-0.5">
+            <p className="text-[13px] sm:text-sm font-bold text-base-content/60 mb-0.5">
               {card.label}
             </p>
-            <h2 className="text-2xl sm:text-[28px] font-extrabold text-base-content leading-none mb-1.5 sm:mb-2">
+            <h2 className="text-[40px] font-bold text-base-content leading-none mb-1.5 sm:mb-2">
               {card.value}
             </h2>
 
-            <div className="flex items-center text-[11px] sm:text-[12px] font-medium">
+            <div className="flex items-center text-[11px] sm:text-[12px] font-bold">
               {card.trend === "up" && (
                 <span className="text-emerald-500 flex items-center gap-1">
                   <ArrowUpIcon className="w-3 h-3" strokeWidth={3} />

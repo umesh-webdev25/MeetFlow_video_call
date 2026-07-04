@@ -25,7 +25,7 @@ export const verifyGroupMembership = async (groupId, userId) => {
  */
 export const verifyGroupAdmin = async (groupId, userId) => {
   const group = await verifyGroupMembership(groupId, userId);
-  
+
   const isAdmin = group.admins.some(
     (a) => a.toString() === userId.toString()
   ) || group.members.some(
@@ -114,18 +114,54 @@ export const createGroup = async (groupData) => {
 /**
  * GET ALL GROUPS (scoped to user)
  */
+// export const getAllGroups = async (userId, includeDeleted = false) => {
+//   try {
+//     const query = {
+//       $or: [
+//         { admins: userId },
+//         { members: { $elemMatch: { userId: userId, role: "admin" } } }
+//       ]
+//     };
+//     if (!includeDeleted) {
+//       query.isDeleted = { $ne: true };
+//     }
+//     const groups = await Group.find(query).sort({ createdAt: -1 });
+//     return groups;
+//   } catch (error) {
+//     throw new Error(error.message);
+//   }
+// };
 export const getAllGroups = async (userId, includeDeleted = false) => {
   try {
     const query = {
       $or: [
         { admins: userId },
-        { members: { $elemMatch: { userId: userId, role: "admin" } } }
-      ]
+        {
+          members: {
+            $elemMatch: {
+              userId: userId,
+              role: "admin",
+            },
+          },
+        },
+      ],
     };
+
     if (!includeDeleted) {
       query.isDeleted = { $ne: true };
     }
-    const groups = await Group.find(query).sort({ createdAt: -1 });
+
+    const groups = await Group.find(query)
+      .populate({
+        path: "members.userId",
+        select: "fullName profilePic email",
+      })
+      .populate({
+        path: "admins",
+        select: "fullName profilePic email",
+      })
+      .sort({ createdAt: -1 });
+
     return groups;
   } catch (error) {
     throw new Error(error.message);
@@ -179,7 +215,16 @@ export const getMyGroups = async (userId) => {
  */
 export const getGroupById = async (id, userId) => {
   try {
-    const group = await verifyGroupMembership(id, userId);
+    await verifyGroupMembership(id, userId);
+    const group = await Group.findById(id)
+      .populate({
+        path: "members.userId",
+        select: "fullName profilePic email",
+      })
+      .populate({
+        path: "admins",
+        select: "fullName profilePic email",
+      });
     return group;
   } catch (error) {
     if (error instanceof AppError) throw error;
@@ -202,15 +247,15 @@ export const updateGroup = async (id, userId, updateData) => {
 
       if (groupImage.startsWith("data:") || groupImage.startsWith("/uploads/") || groupImage.startsWith("uploads/")) {
         const uploadPath = groupImage.startsWith("data:") ? groupImage : (groupImage.startsWith("/") ? `.${groupImage}` : `./${groupImage}`);
-        const uploadResponse = await cloudinary.uploader.upload(uploadPath, { 
-          folder: "groups" 
+        const uploadResponse = await cloudinary.uploader.upload(uploadPath, {
+          folder: "groups"
         });
-        
+
         groupImage = uploadResponse.secure_url;
 
         // Try to delete local file if it was uploaded via multer
         if (!uploadPath.startsWith("data:")) {
-          try { fs.unlinkSync(uploadPath); } catch (e) {}
+          try { fs.unlinkSync(uploadPath); } catch (e) { }
         }
       }
     }
