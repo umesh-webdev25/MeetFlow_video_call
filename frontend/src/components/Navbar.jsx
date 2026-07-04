@@ -76,9 +76,17 @@ const Navbar = () => {
               </svg>
               <span className="text-[14px]">Search anything...</span>
             </div>
-            <kbd className="inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-medium text-base-content/50 bg-base-200/50 border border-base-200 rounded-md transition-colors group-hover:bg-base-200 group-hover:text-base-content/70">
-              ⌘ K
-            </kbd>
+            <div className="inline-flex items-center gap-1 text-sm">
+              <kbd className="inline-flex items-center justify-center min-w-[26px] h-6 px-2 text-xs font-semibold text-base-content/60 bg-base-200 border border-base-300 rounded-md shadow-sm">
+                Ctrl
+              </kbd>
+
+              <span className="text-base-content/40">+</span>
+
+              <kbd className="inline-flex items-center justify-center w-6 h-6 text-xs font-semibold text-base-content/60 bg-base-200 border border-base-300 rounded-md shadow-sm">
+                K
+              </kbd>
+            </div>
           </button>
 
           {/* NOTIFICATIONS */}
