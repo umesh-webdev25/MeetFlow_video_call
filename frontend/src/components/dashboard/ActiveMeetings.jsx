@@ -66,7 +66,7 @@ const ActiveMeetings = ({ meetings }) => {
               
               <button
                 onClick={() => navigate(`/meeting/lobby?code=${meeting.meetingCode}`)}
-                className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary text-primary-content text-sm font-bold rounded-xl hover:bg-primary/90 hover:scale-105 active:scale-95 shadow-md shadow-primary/20 transition-all duration-200"
+                className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-success text-white text-sm font-bold rounded-xl hover:bg-success/90 hover:scale-105 active:scale-95 shadow-md shadow-success/20 transition-all duration-200"
               >
                 <LogInIcon className="size-4" />
                 Join Call

@@ -176,33 +176,47 @@ export const getMyGroups = async (userId) => {
     const groups = await Group.find({
       "members.userId": userId,
       isDeleted: { $ne: true }
-    }).sort({ createdAt: -1 });
+    })
+      .populate({
+        path: "members.userId",
+        select: "fullName name profilePic email",
+      })
+      .sort({ createdAt: -1 });
 
     const ScheduleMeeting = (await import("../models/Schedulemeeting.js")).default;
     const Meeting = (await import("../models/Meeting.js")).default;
 
-    const groupStats = await Promise.all(groups.map(async (group) => {
-      // Get Upcoming Meetings Count
-      const upcomingCount = await ScheduleMeeting.countDocuments({
-        groupId: group._id,
-        status: { $in: ["pending", "upcoming"] },
-      });
+    const groupStats = await Promise.all(
+      groups.map(async (group) => {
+        const upcomingCount = await ScheduleMeeting.countDocuments({
+          groupId: group._id,
+          status: { $in: ["pending", "upcoming"] },
+        });
 
-      // Check for active meeting
-      const activeMeeting = await Meeting.findOne({
-        groupId: group._id,
-        status: "active"
-      });
+        const activeMeeting = await Meeting.findOne({
+          groupId: group._id,
+          status: "active",
+        });
 
-      return {
-        groupId: group._id,
-        groupName: group.groupName,
-        groupImage: group.groupImage,
-        memberCount: group.members.length,
-        upcomingMeetingCount: upcomingCount,
-        activeMeeting: activeMeeting ? activeMeeting.meetingCode : null
-      };
-    }));
+        return {
+          groupId: group._id,
+          groupName: group.groupName,
+          groupImage: group.groupImage,
+          memberCount: group.members.length,
+          upcomingMeetingCount: upcomingCount,
+          activeMeeting: activeMeeting ? activeMeeting.meetingCode : null,
+
+          members: group.members.map((member) => ({
+            userId: member.userId?._id || member.userId,
+            name: member.userId?.fullName || member.userId?.name,
+            email: member.userId?.email,
+            profilePic: member.userId?.profilePic, // <-- profile picture
+            role: member.role,
+            contactId: member.contactId,
+          })),
+        };
+      })
+    );
 
     return groupStats;
   } catch (error) {

@@ -116,7 +116,7 @@ const HomePage = () => {
     refetchInterval: 10000, // Poll every 10 seconds to keep UI synced with meeting status
   });
 
-  console.log("activeMeetingsData", activeMeetingsData);
+  // console.log("activeMeetingsData", activeMeetingsData);
 
 
   const upcomingMeetings = scheduledMeetingsData.filter(m => new Date(m.scheduledAt) > new Date() && m.status !== "completed");
