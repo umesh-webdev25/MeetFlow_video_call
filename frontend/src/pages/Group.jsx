@@ -15,8 +15,6 @@ import {
   FolderIcon,
   MoreVerticalIcon,
   DownloadIcon,
-  MessageSquareIcon,
-  VideoIcon,
   FilterIcon,
   EyeIcon,
   CalendarIcon,
@@ -27,6 +25,7 @@ import {
   ChevronsRightIcon,
   FileTextIcon,
   ShieldCheckIcon,
+  UserIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -496,30 +495,44 @@ const Group = () => {
       )}
     >
       {/* ── PAGE HEADER ── */}
-      <div
-        className="
-    flex items-center justify-between
-    mb-5
-   bg-base-200
-    border border-base-300/70 rounded-xl
-    px-6 py-5
-    shadow-sm
-  "
-      >
+      <div className="relative overflow-hidden flex items-center justify-between rounded-2xl border border-base-300/70 bg-base-200 px-6 py-6 shadow-sm">
         {/* Left Content */}
-        <div>
-          <h1 className="text-2xl font-bold text-base-content">Groups</h1>
+        <div className="flex items-center gap-4 relative z-10">
+          {/* <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10">
+            <UsersIcon className="h-7 w-7 text-primary" />
+          </div> */}
 
-          <p className="text-sm text-base-content/50 mt-1">
-            Manage your groups and contacts easily
-          </p>
+          <div>
+            <h1 className="text-3xl font-bold text-base-content">My Groups</h1>
+            <p className="mt-1 text-sm text-base-content/60">
+              Groups where you are a member or an admin
+            </p>
+          </div>
         </div>
 
-        {/* Right Button */}
+        {/* Right Illustration */}
+        <div className="hidden md:flex items-center gap-2 relative z-10">
+          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <UserIcon className="h-5 w-5 text-primary" />
+          </div>
+
+          <div className="h-14 w-14 rounded-full border-4 border-base-200 bg-primary/20 flex items-center justify-center shadow">
+            <UsersIcon className="h-7 w-7 text-primary" />
+          </div>
+
+          <div className="space-y-2 ml-2">
+            <div className="h-5 w-10 rounded-full bg-primary/10" />
+            <div className="h-5 w-10 rounded-full bg-primary/10" />
+          </div>
+        </div>
+
+        {/* Decorative Shapes */}
+        <div className="absolute -right-6 top-0 h-full w-48 rounded-l-full bg-primary/5" />
+        <div className="absolute right-10 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full bg-primary/5" />
       </div>
 
       {/* ── STAT CARDS ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 mb-8 mt-4">
         {[
           {
             label: "Total Groups",

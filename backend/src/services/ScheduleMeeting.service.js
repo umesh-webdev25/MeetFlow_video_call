@@ -44,7 +44,9 @@ export const getMeetings = async (userId) => {
   try {
     const meetings = await ScheduleMeeting.find({
       createdBy: userId
-    }).populate("groupId", "groupName groupImage");
+    })
+      .populate("groupId", "groupName groupImage")
+      .populate("invitees", "profilePic fullName");
 
     return meetings;
   } catch (error) {

@@ -206,11 +206,11 @@ const MyGroupsPage = () => {
       </Helmet>
 
       {/* ── PAGE HEADER ── */}
-      <div className="relative overflow-hidden flex items-center justify-between mb-5 bg-base-100 border border-base-300 rounded-2xl px-6 py-5 shadow-sm">
+      <div className="relative overflow-hidden flex items-center justify-between rounded-2xl border border-base-300/70 bg-base-200 px-6 py-6 shadow-sm">
         <div className="flex items-center gap-4 relative z-10">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+          {/* <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
             <UsersIcon className="w-6 h-6" />
-          </div>
+          </div> */}
           <div>
             <h1 className="text-2xl font-bold text-base-content">My Groups</h1>
             <p className="text-sm text-base-content/50 mt-1">
@@ -224,7 +224,7 @@ const MyGroupsPage = () => {
           <div className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center text-primary">
             <UsersIcon className="w-5 h-5" />
           </div>
-          <div className="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center text-secondary -ml-3 ring-4 ring-base-100">
+          <div className="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center text-secondary -ml-3 ring-4 ring-base-200">
             <VideoIcon className="w-6 h-6" />
           </div>
           <div className="flex flex-col gap-1.5 -ml-1">
@@ -237,7 +237,7 @@ const MyGroupsPage = () => {
       </div>
 
       {/* ── STATS ROW ── */}
-      <div className="flex flex-wrap items-stretch divide-x divide-base-300 bg-base-100 border border-base-300 rounded-2xl mb-5 shadow-sm overflow-hidden">
+      <div className="flex flex-wrap items-stretch divide-x divide-base-300/70 bg-base-200 border border-base-300/70 rounded-xl mb-5 shadow-sm overflow-hidden mt-4">
         <StatCard
           icon={UsersIcon}
           iconBg="bg-primary/10"
@@ -280,7 +280,7 @@ const MyGroupsPage = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="appearance-none text-sm bg-base-100 border border-base-300 rounded-xl pl-3 pr-8 py-2 text-base-content/70 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30"
+              className="appearance-none text-sm bg-base-200 border border-base-300/70 rounded-xl pl-3 pr-8 py-2 text-base-content/70 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/30"
             >
               <option value="latest">Sort by: Latest</option>
               <option value="name">Sort by: Name</option>
@@ -289,7 +289,7 @@ const MyGroupsPage = () => {
             <ChevronDownIcon className="w-4 h-4 absolute right-2.5 top-1/2 -translate-y-1/2 text-base-content/40 pointer-events-none" />
           </div>
 
-          <div className="flex items-center bg-base-100 border border-base-300 rounded-xl p-1">
+          <div className="flex items-center bg-base-200 border border-base-300/70 rounded-xl p-1">
             <button
               onClick={() => setViewMode("grid")}
               className={`p-1.5 rounded-lg transition-colors ${viewMode === "grid" ? "bg-primary/10 text-primary" : "text-base-content/40"
@@ -316,7 +316,7 @@ const MyGroupsPage = () => {
           Loading your groups…
         </div>
       ) : sortedGroups.length === 0 ? (
-        <div className="bg-base-100 border border-base-300 rounded-2xl py-16 text-center text-base-content/50">
+        <div className="bg-base-200 border border-base-300/70 rounded-xl py-16 text-center text-base-content/50">
           <UsersIcon className="w-8 h-8 mx-auto mb-3 opacity-40" />
           <p className="font-medium">No groups yet</p>
           <p className="text-sm mt-1">Create a group to start meeting with your team.</p>
@@ -333,7 +333,7 @@ const MyGroupsPage = () => {
             <div
               key={group.groupId}
               onClick={() => navigate(`/groups/${group.groupId}`)}
-              className="group/card bg-base-100 border border-base-300 rounded-2xl p-4 hover:shadow-md hover:border-primary/20 transition-all cursor-pointer"
+              className="group/card bg-base-200 border border-base-300/70 rounded-xl p-4 hover:shadow-md hover:border-primary/20 transition-all cursor-pointer"
             >
               <div className="flex items-start justify-between gap-2 mb-3">
                 <div className="flex items-center gap-3 min-w-0">
@@ -492,7 +492,7 @@ const MyGroupsPage = () => {
                 members.map((member) => (
                   <div
                     key={member.userId}
-                    className="group flex items-center justify-between p-4 bg-base-100 border border-base-300 rounded-xl hover:border-primary/30 hover:shadow-lg transition-all"
+                    className="group flex items-center justify-between p-4 bg-base-200 border border-base-300/70 rounded-xl hover:border-primary/30 hover:shadow-lg transition-all"
                   >
                     <div className="flex items-center gap-4 flex-1">
                       <img
