@@ -12,8 +12,10 @@ import {
   SmartphoneIcon,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { useThemeStore } from "../store/useThemeStore";
 
 const NotificationSettingsPage = () => {
+  const { theme } = useThemeStore();
   const [settings, setSettings] = useState({
     friendRequests: true,
     messages: true,
@@ -94,7 +96,7 @@ const NotificationSettingsPage = () => {
   return (
     <div className="space-y-8">
       {/* NOTIFICATION TYPES */}
-      <section className="bg-base-100/80 backdrop-blur-sm border border-base-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-5 -mt-10">
+      <section className="backdrop-blur-md bg-base-200 border border-base-300/50 rounded-2xl p-6 sm:p-7 shadow-m space-y-5 -mt-10 transition-all duration-200">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-primary/10">
             <BellIcon className="size-5 text-primary" />
@@ -113,7 +115,7 @@ const NotificationSettingsPage = () => {
           {notificationTypes.map(({ key, icon: Icon, title, description }) => (
             <label
               key={key}
-              className="flex items-center justify-between p-4 rounded-xl bg-base-200/40 border border-base-300/30 cursor-pointer hover:bg-base-200/70 transition-all group"
+              className="flex items-center justify-between p-4 rounded-xl bg-base-200/40 border border-base-300/50 cursor-pointer hover:bg-base-200/70 transition-all group"
             >
               <div className="flex items-center gap-3">
                 <div className="size-9 rounded-lg bg-base-200 flex items-center justify-center group-hover:bg-base-300 transition-colors">
@@ -136,7 +138,7 @@ const NotificationSettingsPage = () => {
       </section>
 
       {/* DELIVERY CHANNELS */}
-      <section className="bg-base-100/80 backdrop-blur-sm border border-base-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-5">
+      <section className="backdrop-blur-md bg-base-200 border border-base-300/50 rounded-2xl p-6 sm:p-7 shadow-m space-y-5 transition-all duration-200">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-primary/10">
             <BellOffIcon className="size-5 text-primary" />
@@ -155,7 +157,7 @@ const NotificationSettingsPage = () => {
           {deliveryChannels.map(({ key, icon: Icon, title, description }) => (
             <label
               key={key}
-              className="flex items-center justify-between p-4 rounded-xl bg-base-200/40 border border-base-300/30 cursor-pointer hover:bg-base-200/70 transition-all group"
+              className="flex items-center justify-between p-4 rounded-xl bg-base-200/40 border border-base-300/50 cursor-pointer hover:bg-base-200/70 transition-all group"
             >
               <div className="flex items-center gap-3">
                 <div className="size-9 rounded-lg bg-base-200 flex items-center justify-center group-hover:bg-base-300 transition-colors">
@@ -178,7 +180,7 @@ const NotificationSettingsPage = () => {
       </section>
 
       {/* QUIET HOURS */}
-      <section className="bg-base-100/80 backdrop-blur-sm border border-base-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-5">
+      <section className="backdrop-blur-md bg-base-200 border border-base-300/50 rounded-2xl p-6 sm:p-7 shadow-m space-y-5 transition-all duration-200">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-base-200">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-base-content/50">
@@ -198,9 +200,9 @@ const NotificationSettingsPage = () => {
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 rounded-xl bg-base-200/40 border border-base-300/50">
           <div className="flex items-center gap-2">
-            <input type="time" defaultValue="22:00" className="input input-bordered input-sm rounded-lg text-sm bg-base-100" />
+            <input type="time" defaultValue="22:00" className="input input-bordered input-sm rounded-xl text-sm bg-base-200/50 border-base-300 focus:outline-none" />
             <span className="text-sm text-base-content/40 font-medium">to</span>
-            <input type="time" defaultValue="08:00" className="input input-bordered input-sm rounded-lg text-sm bg-base-100" />
+            <input type="time" defaultValue="08:00" className="input input-bordered input-sm rounded-xl text-sm bg-base-200/50 border-base-300 focus:outline-none" />
           </div>
           <label className="flex items-center gap-2 cursor-pointer ml-auto">
             <span className="text-xs text-base-content/50 font-medium">Enabled</span>
@@ -213,7 +215,7 @@ const NotificationSettingsPage = () => {
       <div className="flex justify-end">
         <button
           onClick={handleSave}
-          className="btn btn-primary rounded-xl px-8 shadow-md hover:shadow-lg transition-all gap-2"
+          className="btn bg-gradient-to-r from-primary to-blue-500 text-white border-none px-8 rounded-xl font-bold shadow-lg shadow-primary/25 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 gap-2"
         >
           {saved ? (
             <>

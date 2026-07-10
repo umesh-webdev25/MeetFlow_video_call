@@ -73,11 +73,7 @@ const NotificationsPage = () => {
 
       {/* PAGE HEADER */}
       <div
-        className={`relative flex w-full flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden rounded-2xl px-10 py-7 border transition-all duration-200 ${
-          theme === "MeetFlow-pro"
-            ? "bg-white border-slate-200/80 shadow-sm"
-            : "bg-slate-900/60 border-slate-800 shadow-lg"
-        }`}
+        className="relative flex w-full flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden rounded-2xl px-10 py-7 border border-base-300/50 bg-base-200 backdrop-blur-md shadow-m transition-all duration-200"
       >
         {/* decorative background blobs */}
         <div

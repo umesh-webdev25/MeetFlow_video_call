@@ -1,10 +1,17 @@
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import MobileNav from "./MobileNav";
+import { useThemeStore } from "../store/useThemeStore";
+import { cn } from "../lib/utils";
 
 const Layout = ({ children, showSidebar = false }) => {
+  const { theme } = useThemeStore();
+
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className={cn(
+      "min-h-screen flex flex-col lg:flex-row transition-colors duration-200",
+      theme === "MeetFlow-pro" ? "bg-[#f8fafc]" : "bg-base-200"
+    )}>
       {showSidebar && <Sidebar />}
 
       <div className="flex-1 flex flex-col relative">
