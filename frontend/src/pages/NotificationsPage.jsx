@@ -1,17 +1,44 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { acceptFriendRequest, getFriendRequests } from "../lib/api";
-import { BellIcon, ClockIcon, CheckCircleIcon, UserPlusIcon } from "lucide-react";
+import {
+  Bell,
+  CheckCheck,
+  BellIcon,
+  ClockIcon,
+  CheckCircleIcon,
+  UserPlusIcon,
+} from "lucide-react";
 import NoNotificationsFound from "../components/NoNotificationsFound";
 import { capitalize } from "../lib/utils";
 import { getLanguageFlag } from "../components/FriendCard";
 import { Helmet } from "react-helmet-async";
 import ProfileImage from "../components/ProfileImage.jsx";
 import { useNotificationStore } from "../store/useNotificationStore.js";
+import { useThemeStore } from "../store/useThemeStore.js";
 import { useEffect } from "react";
 
+const timeAgo = (dateInput) => {
+  if (!dateInput) return "";
+  const date = new Date(dateInput);
+  const now = new Date();
+  const seconds = Math.floor((now - date) / 1000);
+
+  if (seconds < 60) return "just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+};
+
 const NotificationsPage = () => {
+  const { theme } = useThemeStore();
   const queryClient = useQueryClient();
-  const { notifications, fetchMyNotifications, markAllAsRead, markAsRead } = useNotificationStore();
+  const { notifications, fetchMyNotifications, markAllAsRead, markAsRead } =
+    useNotificationStore();
 
   useEffect(() => {
     fetchMyNotifications();
@@ -39,31 +66,86 @@ const NotificationsPage = () => {
   const acceptedRequests = friendRequests?.acceptedReqs || [];
 
   return (
-    <div className="p-6 sm:p-8 max-w-4xl mx-auto space-y-10">
+    <div className="p-6 sm:p-8 max-w-8xl mx-auto space-y-10">
       <Helmet>
         <title>Notifications | MeetFlow</title>
       </Helmet>
 
       {/* PAGE HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-base-200">
-        <div>
-          <h1 className="text-2xl font-bold text-base-content tracking-tight">
+      <div
+        className={`relative flex w-full flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden rounded-2xl px-10 py-7 border transition-all duration-200 ${
+          theme === "MeetFlow-pro"
+            ? "bg-white border-slate-200/80 shadow-sm"
+            : "bg-slate-900/60 border-slate-800 shadow-lg"
+        }`}
+      >
+        {/* decorative background blobs */}
+        <div
+          className={`pointer-events-none absolute -right-10 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full blur-2xl transition-colors duration-200 ${
+            theme === "MeetFlow-pro" ? "bg-indigo-100/30" : "bg-indigo-950/20"
+          }`}
+        />
+        <div
+          className={`pointer-events-none absolute right-32 top-3 h-4 w-4 rounded-full transition-colors duration-200 ${
+            theme === "MeetFlow-pro" ? "bg-indigo-200/30" : "bg-indigo-900/10"
+          }`}
+        />
+        <div
+          className={`pointer-events-none absolute right-52 bottom-4 h-3 w-3 rounded-full transition-colors duration-200 ${
+            theme === "MeetFlow-pro" ? "bg-indigo-200/20" : "bg-indigo-900/10"
+          }`}
+        />
+
+        {/* left: title */}
+        <div className="relative z-10">
+          <h1
+            className={`text-2xl font-bold tracking-tight transition-colors duration-200 ${
+              theme === "MeetFlow-pro" ? "text-slate-900" : "text-slate-100"
+            }`}
+          >
             Notifications
           </h1>
-          <p className="text-sm text-base-content/50 mt-0.5">
+          <p
+            className={`text-sm mt-1 transition-colors duration-200 ${
+              theme === "MeetFlow-pro" ? "text-slate-500" : "text-slate-400"
+            }`}
+          >
             Stay updated with your professional network
           </p>
         </div>
-        <div className="flex justify-end">
-        <button 
+
+        {/* center-right: bell illustration */}
+        <div className="relative z-10 hidden sm:flex items-center justify-center ml-auto">
+          <div
+            className={`relative flex h-16 w-16 items-center justify-center rounded-full transition-colors duration-200 ${
+              theme === "MeetFlow-pro" ? "bg-indigo-50" : "bg-indigo-950/40"
+            }`}
+          >
+            <Bell
+              className={`h-8 w-8 transition-colors duration-200 ${
+                theme === "MeetFlow-pro" ? "text-indigo-600" : "text-indigo-400"
+              }`}
+              strokeWidth={1.75}
+              fill="currentColor"
+              fillOpacity={0.15}
+            />
+          </div>
+        </div>
+      </div>
+      {/* right: action button */}
+      <div className="relative z-10 flex justify-end">
+        <button
           onClick={() => markAllAsRead()}
-          className="btn btn-sm btn-ghost text-primary hover:bg-primary/10 -mt-4"
+          className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all border ${
+            theme === "MeetFlow-pro"
+              ? "bg-white text-indigo-600 border-slate-200 hover:bg-indigo-50/50"
+              : "bg-slate-800 text-indigo-400 border-slate-700 hover:bg-slate-700"
+          }`}
         >
+          <CheckCheck className="h-4 w-4" strokeWidth={2} />
           Mark all as read
         </button>
       </div>
-      </div>
-
       {/* LOADING */}
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-24 space-y-3">
@@ -82,7 +164,6 @@ const NotificationsPage = () => {
         </div>
       ) : (
         <div className="space-y-10">
-
           {/* INCOMING REQUESTS */}
           {incomingRequests.length > 0 && (
             <section className="space-y-4">
@@ -118,7 +199,9 @@ const NotificationsPage = () => {
                               {capitalize(request.sender?.nativeLanguage)}
                             </span>
                             <span className="inline-flex items-center gap-1 text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-md">
-                              {getLanguageFlag(request.sender?.learningLanguage)}
+                              {getLanguageFlag(
+                                request.sender?.learningLanguage,
+                              )}
                               {capitalize(request.sender?.learningLanguage)}
                             </span>
                           </div>
@@ -170,7 +253,7 @@ const NotificationsPage = () => {
                         </p>
                         <div className="flex items-center gap-1 text-xs text-base-content/30 mt-1.5">
                           <ClockIcon className="size-3" />
-                          Just now
+                          {timeAgo(notification.createdAt)}
                         </div>
                       </div>
                       <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-success bg-success/10 px-2.5 py-1 rounded-md border border-success/20 shrink-0">
@@ -187,7 +270,7 @@ const NotificationsPage = () => {
           {/* GENERAL NOTIFICATIONS */}
           {notifications.length > 0 && (
             <section className="space-y-4">
-              <h2 className="text-xs font-semibold text-base-content/50 uppercase tracking-widest -mt-6 ml-4">
+              <h2 className="text-xs font-semibold text-base-content/50 uppercase tracking-widest -mt-16 ml-4">
                 All Notifications
               </h2>
 
@@ -195,15 +278,19 @@ const NotificationsPage = () => {
                 {notifications.map((notification) => (
                   <div
                     key={notification._id}
-                    onClick={() => !notification.isRead && markAsRead(notification._id)}
+                    onClick={() =>
+                      !notification.isRead && markAsRead(notification._id)
+                    }
                     className={`bg-base-100 border rounded-xl p-4 transition-all duration-200 cursor-pointer ${
-                      notification.isRead ? "border-base-200 opacity-70" : "border-primary/30 shadow-sm bg-base-200/50"
+                      notification.isRead
+                        ? "border-base-200 opacity-70"
+                        : "border-primary/30 shadow-sm bg-base-200/50"
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div className="size-11 rounded-lg overflow-hidden ring-1 ring-base-300 shrink-0 bg-base-300 flex items-center justify-center">
                         {notification.sender?.profilePic ? (
-                           <ProfileImage
+                          <ProfileImage
                             src={notification.sender.profilePic}
                             alt={notification.title}
                             className="w-full h-full"
@@ -220,9 +307,14 @@ const NotificationsPage = () => {
                           {notification.content}
                         </p>
                       </div>
-                      {!notification.isRead && (
-                        <div className="size-2 rounded-full bg-primary shrink-0" />
-                      )}
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-xs text-base-content/40 font-medium">
+                          {timeAgo(notification.createdAt)}
+                        </span>
+                        {!notification.isRead && (
+                          <div className="size-2 rounded-full bg-primary shrink-0" />
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -231,9 +323,9 @@ const NotificationsPage = () => {
           )}
 
           {/* EMPTY STATE */}
-          {incomingRequests.length === 0 && acceptedRequests.length === 0 && notifications.length === 0 && (
-            <NoNotificationsFound />
-          )}
+          {incomingRequests.length === 0 &&
+            acceptedRequests.length === 0 &&
+            notifications.length === 0 && <NoNotificationsFound />}
         </div>
       )}
     </div>
