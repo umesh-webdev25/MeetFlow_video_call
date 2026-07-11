@@ -191,9 +191,9 @@ const History = () => {
             "
           >
             <div
-              className={`w-14 h-14 sm:w-16 sm:h-16 border-xs rounded-[16px] ${card.bg} flex items-center justify-center flex-shrink-0 mr-4`}
+              className={`w-20 h-20 sm:w-18 sm:h-18 border-xs rounded-xl ${card.bg} flex items-center justify-center flex-shrink-0 mr-4`}
             >
-              <card.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${card.color}`} />
+              <card.icon className={`w-7 h-7 sm:w-8 sm:h-8 ${card.color}`} />
             </div>
 
             <div className="flex flex-col min-w-0">
