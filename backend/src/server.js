@@ -85,12 +85,7 @@ app.use("/api/groups", groupRouter);
 app.use("/api/contacts", contectRouter);
 app.use("/api/schedule-meetings", scheduleMeetingRoutes);
 app.use("/api/notifications", notificationRoutes);
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-}
+
 
 // Handle undefined routes
 app.all("*", (req, res, next) => {
