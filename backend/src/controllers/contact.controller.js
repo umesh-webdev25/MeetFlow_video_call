@@ -87,9 +87,7 @@ export const updateContact = asyncHandler(async (req, res) => {
     updateData.contactImage = contactImageBody;
   }
 
-  if (req.file) {
-    updateData.contactImage = req.file.path || req.file.secure_url || "";
-  }
+  // req.file is handled natively by contactService.updateContact via resolveUploadedFileUrl
 
   const contact = await contactService.updateContact(
     req.params.id,

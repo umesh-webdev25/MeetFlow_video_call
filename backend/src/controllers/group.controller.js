@@ -21,7 +21,12 @@ const parseJSON = (value, fallback = []) => {
  */
 export const createGroup = asyncHandler(async (req, res) => {
   const { groupName, groupBio, members, admins, status } = req.body;
-  const groupImage = req.file?.path || "";
+  
+  let groupImage = "";
+  if (req.file) {
+    const fileBase64 = req.file.buffer.toString("base64");
+    groupImage = `data:${req.file.mimetype};base64,${fileBase64}`;
+  }
 
   const creatorId = req.user._id;
   let membersList = parseJSON(members).map(m => {
@@ -83,7 +88,8 @@ export const updateGroup = asyncHandler(async (req, res) => {
   const updateData = { groupName, groupBio };
 
   if (req.file) {
-    updateData.groupImage = req.file.path;
+    const fileBase64 = req.file.buffer.toString("base64");
+    updateData.groupImage = `data:${req.file.mimetype};base64,${fileBase64}`;
   }
 
   if (typeof status !== "undefined") {

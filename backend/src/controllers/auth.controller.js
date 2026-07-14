@@ -181,7 +181,8 @@ export const onboard = asyncHandler(async (req, res) => {
   let profilePic = "";
 
   if (req.file) {
-    profilePic = req.file.path;
+    const fileBase64 = req.file.buffer.toString("base64");
+    profilePic = `data:${req.file.mimetype};base64,${fileBase64}`;
   } else if (req.body.profilePic) {
     // ✅ random avatar URL sent as text field from frontend
     profilePic = req.body.profilePic;
