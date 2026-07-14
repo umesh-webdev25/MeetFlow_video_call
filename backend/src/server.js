@@ -63,7 +63,7 @@ app.use(mongoSanitize());
 // Prevent parameter pollution
 app.use(hpp());
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+const FRONTEND_URL = (process.env.FRONTEND_URL || "http://localhost:3000").trim();
 app.use(
   cors({
     origin: FRONTEND_URL,
@@ -121,7 +121,7 @@ const server = app.listen(PORT, async () => {
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: (process.env.FRONTEND_URL || "http://localhost:3000").trim(),
     methods: ["GET", "POST"]
   }
 });
