@@ -61,8 +61,15 @@ export const login = asyncHandler(async (req, res) => {
 
   const { user, accessToken } = result;
 
-  res.cookie("jwt", accessToken, authService.getCookieOptions("access"));
-  res.clearCookie("refreshToken");
+  const cookieOptions = authService.getCookieOptions("access", req);
+  res.cookie("jwt", accessToken, cookieOptions);
+  
+  const clearOptions = {
+    httpOnly: true,
+    sameSite: cookieOptions.sameSite,
+    secure: cookieOptions.secure,
+  };
+  res.clearCookie("refreshToken", clearOptions);
 
   return ApiResponse.success(res, user, "Login successful");
 });
@@ -85,8 +92,15 @@ export const verify2FA = asyncHandler(async (req, res) => {
 
   const { user, accessToken } = await authService.verify2FA(email, otp, reqInfo);
 
-  res.cookie("jwt", accessToken, authService.getCookieOptions("access"));
-  res.clearCookie("refreshToken");
+  const cookieOptions = authService.getCookieOptions("access", req);
+  res.cookie("jwt", accessToken, cookieOptions);
+  
+  const clearOptions = {
+    httpOnly: true,
+    sameSite: cookieOptions.sameSite,
+    secure: cookieOptions.secure,
+  };
+  res.clearCookie("refreshToken", clearOptions);
 
   return ApiResponse.success(res, user, "Login successful");
 });
@@ -113,8 +127,8 @@ export const refresh = asyncHandler(async (req, res) => {
 
   const { accessToken, refreshToken } = await authService.refreshAccessToken(currentRefreshToken);
 
-  res.cookie("jwt", accessToken, authService.getCookieOptions("access"));
-  res.cookie("refreshToken", refreshToken, authService.getCookieOptions("refresh"));
+  res.cookie("jwt", accessToken, authService.getCookieOptions("access", req));
+  res.cookie("refreshToken", refreshToken, authService.getCookieOptions("refresh", req));
 
   return ApiResponse.success(res, null, "Token refreshed");
 });
@@ -128,8 +142,14 @@ export const logout = asyncHandler(async (req, res) => {
   if (refreshToken) {
     await authService.logout(refreshToken);
   }
-  res.clearCookie("jwt");
-  res.clearCookie("refreshToken");
+  const isSecure = req.secure || req.headers["x-forwarded-proto"] === "https";
+  const clearOptions = {
+    httpOnly: true,
+    sameSite: isSecure ? "none" : "lax",
+    secure: isSecure,
+  };
+  res.clearCookie("jwt", clearOptions);
+  res.clearCookie("refreshToken", clearOptions);
   return ApiResponse.success(res, null, "Logout successful");
 });
 
@@ -146,8 +166,15 @@ export const verifyOTP = asyncHandler(async (req, res) => {
 
   const accessToken = authService.generateAccessToken(user._id);
 
-  res.cookie("jwt", accessToken, authService.getCookieOptions("access"));
-  res.clearCookie("refreshToken");
+  const cookieOptions = authService.getCookieOptions("access", req);
+  res.cookie("jwt", accessToken, cookieOptions);
+  
+  const clearOptions = {
+    httpOnly: true,
+    sameSite: cookieOptions.sameSite,
+    secure: cookieOptions.secure,
+  };
+  res.clearCookie("refreshToken", clearOptions);
 
   return ApiResponse.success(res, user, "Email verified successfully");
 });

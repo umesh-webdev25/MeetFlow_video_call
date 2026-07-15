@@ -32,12 +32,35 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
 // 1. GLOBAL MIDDLEWARES
 // Set security HTTP headers
 app.use(helmet());
+
+// Dynamic CORS configuration supporting local development and multiple deployed origins
+const frontendUrls = (process.env.FRONTEND_URL || "http://localhost:3000")
+  .split(",")
+  .map(url => url.trim());
+
+const isLocalhost = (origin) => {
+  return !origin || /^https?:\/\/localhost(:\d+)?$/.test(origin) || /^https?:\/\/127\.0\.0\.1(:\d+)?$/.test(origin);
+};
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (isLocalhost(origin) || frontendUrls.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Development logging
 if (process.env.NODE_ENV === "development") {
@@ -62,14 +85,6 @@ app.use(mongoSanitize());
 
 // Prevent parameter pollution
 app.use(hpp());
-
-const FRONTEND_URL = (process.env.FRONTEND_URL || "http://localhost:3000").trim();
-app.use(
-  cors({
-    origin: FRONTEND_URL,
-    credentials: true,
-  })
-);
 
 // 2. ROUTES
 app.get("/health", (req, res) => {
@@ -116,7 +131,13 @@ const server = app.listen(PORT, async () => {
 
 const io = new Server(server, {
   cors: {
-    origin: (process.env.FRONTEND_URL || "http://localhost:3000").trim(),
+    origin: (origin, callback) => {
+      if (isLocalhost(origin) || frontendUrls.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Not allowed by CORS: ${origin}`));
+      }
+    },
     methods: ["GET", "POST"]
   }
 });

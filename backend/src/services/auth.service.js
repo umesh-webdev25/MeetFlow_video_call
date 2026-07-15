@@ -342,13 +342,17 @@ class AuthService {
     });
   }
 
-  getCookieOptions(type = "access") {
+  getCookieOptions(type = "access", req = null) {
     const isRefresh = type === "refresh";
+    const isSecure = req 
+      ? (req.secure || req.headers["x-forwarded-proto"] === "https") 
+      : (process.env.NODE_ENV === "production");
+
     return {
       maxAge: isRefresh ? 30 * 24 * 60 * 60 * 1000 : 15 * 60 * 1000,
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: isSecure ? "none" : "lax",
+      secure: isSecure,
     };
   }
 }
