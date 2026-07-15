@@ -1,9 +1,5 @@
 import AppError from "../utils/AppError.js";
 
-/**
- * Zod Validation Middleware
- * Validates request body, query, and params against a schema
- */
 const validate = (schema) => (req, res, next) => {
   try {
     schema.parse({
@@ -11,9 +7,14 @@ const validate = (schema) => (req, res, next) => {
       query: req.query,
       params: req.params,
     });
+
     next();
   } catch (error) {
-    const message = error.errors.map((i) => i.message).join(", ");
+    const message =
+      error.issues?.map((i) => i.message).join(", ") ||
+      error.message ||
+      "Validation failed";
+
     next(new AppError(message, 400));
   }
 };
