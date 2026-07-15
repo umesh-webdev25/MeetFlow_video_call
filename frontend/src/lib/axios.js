@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/api`;
+const isDevelopment = import.meta.env.MODE === 'development';
+const BASE_URL = isDevelopment 
+  ? '/api' 
+  : `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 export const API_BASE_URL = BASE_URL;
 

@@ -6,6 +6,19 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
+    proxy: {
+      '/api': {
+        target: 'https://meetflow-video-call.onrender.com',
+        changeOrigin: true,
+        secure: true,
+      },
+      '/socket.io': {
+        target: 'https://meetflow-video-call.onrender.com',
+        changeOrigin: true,
+        secure: true,
+        ws: true,
+      }
+    }
   },
   build: {
     outDir: 'build',
