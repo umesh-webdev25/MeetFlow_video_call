@@ -8,14 +8,14 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'https://meetflow-video-call.onrender.com',
+        target: 'http://localhost:5001',
         changeOrigin: true,
-        secure: true,
+        secure: false,
       },
       '/socket.io': {
-        target: 'https://meetflow-video-call.onrender.com',
+        target: 'http://localhost:5001',
         changeOrigin: true,
-        secure: true,
+        secure: false,
         ws: true,
       }
     }
