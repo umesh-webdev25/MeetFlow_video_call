@@ -25,7 +25,7 @@ const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log(authUser.profilePic);
+  console.log(authUser?.profilePic);
   const currentPath = location.pathname;
 
   const { logoutMutation } = useLogout();

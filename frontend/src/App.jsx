@@ -23,6 +23,7 @@ import GroupContacts from "./pages/GroupContacts.jsx";
 import VerifyOTPPage from "./pages/VerifyOTPPage.jsx";
 import { Toaster } from "react-hot-toast";
 
+import LandingPage from "./pages/LandingPage.jsx";
 import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuthUser.js";
 import Layout from "./components/Layout.jsx";
@@ -67,7 +68,7 @@ const App = () => {
 
   if (isLoading) return <PageLoader />;
 
-  const displayTheme = isAuthenticated ? theme : "MeetFlow-pro";
+  const displayTheme = theme || "MeetFlow-pro";
 
   const pageVariants = {
     initial: { opacity: 0, y: 10 },
@@ -81,6 +82,20 @@ const App = () => {
       data-theme={displayTheme}
     >
       <Routes>
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <ProtectedRoute>
+                <Layout showSidebar={true}>
+                  <HomePage />
+                </Layout>
+              </ProtectedRoute>
+            ) : (
+              <LandingPage />
+            )
+          }
+        />
         {/* PUBLIC ROUTES */}
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />
@@ -107,14 +122,6 @@ const App = () => {
 
         {/* PROTECTED ROUTES */}
         <Route element={<ProtectedRoute />}>
-          <Route
-            path="/"
-            element={
-              <Layout showSidebar={true}>
-                <HomePage />
-              </Layout>
-            }
-          />
           <Route
             path="/notifications"
             element={

@@ -97,7 +97,7 @@ const SettingsPage = () => {
     updateProfileMutation(formData);
   };
 
-  console.log(authUser.profilePic);
+  console.log(authUser?.profilePic);
 
   return (
     <div className="p-6 sm:p-8 max-w-8xl mx-auto space-y-10">
