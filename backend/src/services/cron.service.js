@@ -21,42 +21,56 @@ const meetingReminderCron = cron.schedule("* * * * *", async () => {
       scheduledAt: { $gt: now, $lte: fifteenMinutesFromNow }
     }).populate("groupId", "groupName members");
 
+    if (upcomingMeetings.length === 0) return;
+
+    const notificationPayloads = [];
+    const meetingIdsToUpdate = [];
+
     for (const meeting of upcomingMeetings) {
       if (!meeting.groupId) continue;
 
       const group = meeting.groupId;
       const meetingIdStr = meeting._id.toString();
+      meetingIdsToUpdate.push(meeting._id);
 
       // Emit socket event to the group members
       if (ioInstance) {
-        group.members.forEach(member => {
+        group.members.forEach((member) => {
           ioInstance.to(`user:${member.userId.toString()}`).emit("meeting_reminder", {
             meetingId: meetingIdStr,
             title: meeting.title,
             groupName: group.groupName,
-            scheduledAt: meeting.scheduledAt
+            scheduledAt: meeting.scheduledAt,
           });
         });
       }
 
-      // Also create a notification in DB for members
-      await Promise.all(group.members.map(async (member) => {
-        // Option to avoid notifying creator, or just notify everyone
-        await NotificationService.send({
+      // Collect notification payloads for bulk insertion
+      group.members.forEach((member) => {
+        notificationPayloads.push({
           recipientId: member.userId,
           title: "Meeting Reminder",
           content: `The meeting "${meeting.title}" in group "${group.groupName}" is starting in less than 15 minutes!`,
           type: "meeting_reminder",
           metaData: {
             groupId: group._id,
-            meetingId: meetingIdStr
-          }
+            meetingId: meetingIdStr,
+          },
         });
-      }));
+      });
+    }
 
-      // Update status to pending (waiting for host to start/join)
-      meeting.status = "pending";
-      await meeting.save();
+    // 1. Bulk insert all notifications in a single batched database operation
+    if (notificationPayloads.length > 0) {
+      await NotificationService.sendMany(notificationPayloads);
+    }
+
+    // 2. Bulk update all affected meeting statuses in a single statement
+    if (meetingIdsToUpdate.length > 0) {
+      await ScheduleMeeting.updateMany(
+        { _id: { $in: meetingIdsToUpdate } },
+        { $set: { status: "pending" } }
+      );
     }
   } catch (error) {
     console.error("Cron Job Error (meetingReminder):", error);

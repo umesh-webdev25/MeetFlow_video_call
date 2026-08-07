@@ -216,16 +216,24 @@ const GroupContacts = () => {
     }
   };
 
-  /** DELETE */
+  /** DELETE (Optimistic UI Update with Rollback) */
   const handleDeleteContact = async (id) => {
+    const previousContacts = contacts;
+
+    // Optimistically update UI immediately
+    setContacts((prev) => prev.filter((c) => c._id !== id));
+    toast.success("Contact deleted");
+
     try {
       await deleteContact(id);
-      setContacts((prev) => prev.filter((c) => c._id !== id));
       try {
         window.dispatchEvent(new CustomEvent("groups:updated"));
       } catch (e) {}
     } catch (error) {
-      console.log(error);
+      console.error("Failed to delete contact:", error);
+      // Rollback to previous state snapshot
+      setContacts(previousContacts);
+      toast.error(`${error?.response?.data?.message || "Failed to delete contact"}. Action rolled back.`);
     }
   };
 

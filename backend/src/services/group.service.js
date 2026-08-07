@@ -1,5 +1,5 @@
 import Group from "../models/group.js";
-import cloudinary from "../lib/cloudinary.js";
+import cloudinary, { safeUpload } from "../lib/cloudinary.js";
 import fs from "fs";
 import AppError from "../utils/AppError.js";
 
@@ -90,7 +90,7 @@ export const createGroup = async (groupData) => {
 
       if (groupImage.startsWith("data:") || groupImage.startsWith("/uploads/") || groupImage.startsWith("uploads/")) {
         const uploadPath = groupImage.startsWith("data:") ? groupImage : (groupImage.startsWith("/") ? `.${groupImage}` : `./${groupImage}`);
-        const uploadResponse = await cloudinary.uploader.upload(uploadPath, {
+        const uploadResponse = await safeUpload(uploadPath, {
           folder: "groups",
         });
         groupImage = uploadResponse.secure_url;
@@ -261,7 +261,7 @@ export const updateGroup = async (id, userId, updateData) => {
 
       if (groupImage.startsWith("data:") || groupImage.startsWith("/uploads/") || groupImage.startsWith("uploads/")) {
         const uploadPath = groupImage.startsWith("data:") ? groupImage : (groupImage.startsWith("/") ? `.${groupImage}` : `./${groupImage}`);
-        const uploadResponse = await cloudinary.uploader.upload(uploadPath, {
+        const uploadResponse = await safeUpload(uploadPath, {
           folder: "groups"
         });
 

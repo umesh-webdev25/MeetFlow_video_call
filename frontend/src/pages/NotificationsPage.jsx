@@ -16,6 +16,7 @@ import ProfileImage from "../components/ProfileImage.jsx";
 import { useNotificationStore } from "../store/useNotificationStore.js";
 import { useThemeStore } from "../store/useThemeStore.js";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const timeAgo = (dateInput) => {
   if (!dateInput) return "";
@@ -56,7 +57,27 @@ const NotificationsPage = () => {
 
   const { mutate: acceptRequestMutation, isPending } = useMutation({
     mutationFn: acceptFriendRequest,
-    onSuccess: () => {
+    onMutate: async (requestId) => {
+      await queryClient.cancelQueries({ queryKey: ["friendRequests"] });
+      const previousData = queryClient.getQueryData(["friendRequests"]);
+
+      if (previousData) {
+        queryClient.setQueryData(["friendRequests"], {
+          ...previousData,
+          incomingReqs: (previousData.incomingReqs || []).filter((req) => req._id !== requestId),
+        });
+      }
+
+      toast.success("Friend request accepted!");
+      return { previousData };
+    },
+    onError: (err, requestId, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(["friendRequests"], context.previousData);
+      }
+      toast.error(`${err?.response?.data?.message || "Failed to accept friend request"}. Action rolled back.`);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
       queryClient.invalidateQueries({ queryKey: ["friends"] });
     },

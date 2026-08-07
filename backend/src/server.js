@@ -8,6 +8,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
+import compression from "compression";
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import Group from "./models/group.js";
@@ -62,6 +63,26 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// HTTP Response Compression (gzip / brotli / deflate)
+app.use(
+  compression({
+    // Minimum threshold in bytes before compression is applied
+    threshold: 1024,
+    filter: (req, res) => {
+      // Don't compress if client requested x-no-compression header
+      if (req.headers["x-no-compression"]) {
+        return false;
+      }
+      // Avoid double-compressing if Content-Encoding is already set
+      if (res.getHeader("Content-Encoding")) {
+        return false;
+      }
+      // Fallback to standard compression filter (checks MIME types like application/json, text/*)
+      return compression.filter(req, res);
+    },
+  })
+);
+
 // Development logging
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -86,10 +107,23 @@ app.use(mongoSanitize());
 // Prevent parameter pollution
 app.use(hpp());
 
+import { emailCircuitBreaker } from "./services/email.service.js";
+import { cloudinaryCircuitBreaker } from "./lib/cloudinary.js";
+
 // 2. ROUTES
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "UP", timestamp: new Date() });
 });
+
+app.get("/api/circuit-breakers", (req, res) => {
+  res.status(200).json({
+    emailService: emailCircuitBreaker.getMetrics(),
+    cloudinaryService: cloudinaryCircuitBreaker.getMetrics(),
+  });
+});
+import publicRoutes from "./routes/public.route.js";
+
+app.use("/api/public", publicRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);

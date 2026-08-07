@@ -37,16 +37,33 @@ const SecurityPage = () => {
 
   const { mutate: toggle2FAMutation, isPending: is2FAPending } = useMutation({
     mutationFn: toggle2FA,
-    onSuccess: (data) => {
-      queryClient.setQueryData(["authUser"], data);
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["authUser"] });
+      const previousUser = queryClient.getQueryData(["authUser"]);
+
+      if (previousUser) {
+        queryClient.setQueryData(["authUser"], {
+          ...previousUser,
+          twoFactorEnabled: !previousUser.twoFactorEnabled,
+        });
+      }
+
       toast.success(
-        data.twoFactorEnabled
+        !twoFactorEnabled
           ? "Two-factor authentication enabled"
           : "Two-factor authentication disabled"
       );
+
+      return { previousUser };
     },
-    onError: (error) => {
-      toast.error(error?.response?.data?.message || "Failed to toggle 2FA");
+    onError: (error, newVariables, context) => {
+      if (context?.previousUser) {
+        queryClient.setQueryData(["authUser"], context.previousUser);
+      }
+      toast.error(`${error?.response?.data?.message || "Failed to toggle 2FA"}. Action rolled back.`);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["authUser"], data);
     },
   });
 

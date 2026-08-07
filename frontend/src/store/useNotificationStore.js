@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import toast from "react-hot-toast";
 import {
   fetchNotifications,
   getUnreadNotificationCount,
@@ -34,28 +35,50 @@ export const useNotificationStore = create((set, get) => ({
   },
 
   markAsRead: async (id) => {
+    const previousNotifications = get().notifications;
+    const previousUnreadCount = get().unreadCount;
+
+    // Optimistic UI Update immediately
+    set((state) => ({
+      notifications: state.notifications.map((n) =>
+        n._id === id ? { ...n, isRead: true } : n
+      ),
+      unreadCount: Math.max(0, state.unreadCount - 1),
+    }));
+
     try {
       await markNotificationAsRead(id);
-      set((state) => ({
-        notifications: state.notifications.map((n) =>
-          n._id === id ? { ...n, isRead: true } : n
-        ),
-        unreadCount: Math.max(0, state.unreadCount - 1),
-      }));
     } catch (error) {
-      console.error("Failed to mark as read", error);
+      console.error("Failed to mark notification as read", error);
+      // Rollback UI to previous snapshot state
+      set({
+        notifications: previousNotifications,
+        unreadCount: previousUnreadCount,
+      });
+      toast.error("Failed to update notification. Action rolled back.");
     }
   },
 
   markAllAsRead: async () => {
+    const previousNotifications = get().notifications;
+    const previousUnreadCount = get().unreadCount;
+
+    // Optimistic UI Update immediately
+    set((state) => ({
+      notifications: state.notifications.map((n) => ({ ...n, isRead: true })),
+      unreadCount: 0,
+    }));
+
     try {
       await markAllNotificationsAsRead();
-      set((state) => ({
-        notifications: state.notifications.map((n) => ({ ...n, isRead: true })),
-        unreadCount: 0,
-      }));
     } catch (error) {
-      console.error("Failed to mark all as read", error);
+      console.error("Failed to mark all notifications as read", error);
+      // Rollback UI to previous snapshot state
+      set({
+        notifications: previousNotifications,
+        unreadCount: previousUnreadCount,
+      });
+      toast.error("Failed to mark all as read. Action rolled back.");
     }
   },
 

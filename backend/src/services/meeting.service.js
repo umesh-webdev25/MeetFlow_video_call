@@ -143,24 +143,31 @@ class MeetingService {
 
     const user = await userRepository.findById(userId);
 
-    for (const inviteeId of inviteeIds) {
-      await notificationService.send({
-        recipientId: inviteeId,
-        senderId: userId,
-        type: "system_alert",
-        title: "Meeting Invitation",
-        content: `${user.fullName} invited you to "${title}" on ${new Date(scheduledAt).toLocaleString()}`,
-        metaData: { roomId, meetingId: meeting._id },
-      });
+    const notificationPayloads = inviteeIds.map((inviteeId) => ({
+      recipientId: inviteeId,
+      senderId: userId,
+      type: "system_alert",
+      title: "Meeting Invitation",
+      content: `${user.fullName} invited you to "${title}" on ${new Date(scheduledAt).toLocaleString()}`,
+      metaData: { roomId, meetingId: meeting._id },
+    }));
 
-      await queueService.addJob("email", "meeting-invite", {
-        inviteeId,
-        hostName: user.fullName,
-        title,
-        scheduledAt,
-        roomId,
-      });
+    if (notificationPayloads.length > 0) {
+      await notificationService.sendMany(notificationPayloads);
     }
+
+    // Queue email jobs asynchronously
+    await Promise.all(
+      inviteeIds.map((inviteeId) =>
+        queueService.addJob("email", "meeting-invite", {
+          inviteeId,
+          hostName: user.fullName,
+          title,
+          scheduledAt,
+          roomId,
+        })
+      )
+    );
 
     return meeting;
   }
@@ -288,13 +295,12 @@ class MeetingService {
     schedule.meetingCode = createResult.meetingCode;
     await schedule.save();
 
-    // Notify all group members
+    // Notify all group members in a single batched operation
     const group = await Group.findById(groupId);
     if (group && group.members) {
-      await Promise.all(group.members.map(async (member) => {
-        if (member.userId.toString() === userId.toString()) return; // skip host
-
-        await notificationService.send({
+      const notificationPayloads = group.members
+        .filter((member) => member.userId.toString() !== userId.toString())
+        .map((member) => ({
           recipientId: member.userId,
           senderId: userId,
           title: "Meeting Started",
@@ -303,10 +309,13 @@ class MeetingService {
           metaData: {
             groupId: group._id,
             meetingId: schedule._id.toString(),
-            meetingCode: createResult.meetingCode
-          }
-        });
-      }));
+            meetingCode: createResult.meetingCode,
+          },
+        }));
+
+      if (notificationPayloads.length > 0) {
+        await notificationService.sendMany(notificationPayloads);
+      }
     }
 
     const tokenData = await this.getVideoToken(userId);

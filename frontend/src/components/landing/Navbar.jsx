@@ -100,9 +100,9 @@ const Navbar = () => {
               <Link to="/login" className="text-lg font-medium text-slate-800" onClick={() => setIsOpen(false)}>
                 Log in
               </Link>
-              <button className="w-full py-3 mt-2 bg-primary text-white rounded-full text-base font-medium hover:bg-blue-700">
+              <Link to="/signup" className="w-full py-3 mt-2 bg-primary text-white rounded-full text-base font-medium hover:bg-blue-700">
                 Start Free Trial
-              </button>
+              </Link>
             </div>
           </motion.div>
         )}

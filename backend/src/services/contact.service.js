@@ -1,5 +1,5 @@
 import Contact from "../models/contect.js";
-import cloudinary from "../lib/cloudinary.js";
+import cloudinary, { safeUpload } from "../lib/cloudinary.js";
 import User from "../models/User.js";
 import Group from "../models/group.js";
 import AppError from "../utils/AppError.js";
@@ -44,7 +44,7 @@ const resolveUploadedFileUrl = async (file, folder = "contacts") => {
   if (file.buffer) {
     const fileBase64 = file.buffer.toString("base64");
     const dataUri = `data:${file.mimetype};base64,${fileBase64}`;
-    const uploadResponse = await cloudinary.uploader.upload(dataUri, { folder });
+    const uploadResponse = await safeUpload(dataUri, { folder });
 
     console.log("Contact image uploaded to Cloudinary from buffer", {
       publicId: uploadResponse.public_id,

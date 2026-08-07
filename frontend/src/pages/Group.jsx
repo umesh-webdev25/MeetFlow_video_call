@@ -30,6 +30,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { io } from "socket.io-client";
+import toast from "react-hot-toast";
 import { useMeeting } from "../hooks/useMeeting";
 import {
   createGroup,
@@ -348,17 +349,23 @@ const Group = () => {
     }
   };
 
-  // ── Delete group ───────────────────────────────────────────────────────────
+  // ── Delete group (Optimistic UI Update with Rollback) ───────────────────
   const handleDeleteGroup = async (e, id) => {
     e.stopPropagation();
     const prev = groups;
+
+    // Optimistically remove group from UI immediately
     setGroups((p) => p.filter((g) => g._id !== id));
+    toast.success("Group deleted");
+
     try {
       await deleteGroup(id);
       window.dispatchEvent(new CustomEvent("groups:updated"));
     } catch (err) {
       console.error("Failed to delete group:", err);
+      // Rollback to previous state snapshot
       setGroups(prev);
+      toast.error(`${err.response?.data?.message || "Failed to delete group"}. Action rolled back.`);
     }
   };
 
