@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import MagneticButton from "./MagneticButton";
 import ScrollReveal from "./ScrollReveal";
@@ -41,9 +42,11 @@ const HeroSection = () => {
 
         <ScrollReveal delay={0.3}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <MagneticButton className="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-full text-base font-semibold hover:bg-blue-700 transition-colors shadow-lg">
-              Start for free
-            </MagneticButton>
+            <Link to="/signup" className="w-full sm:w-auto">
+              <MagneticButton className="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-full text-base font-semibold hover:bg-blue-700 transition-colors shadow-lg">
+                Start for free
+              </MagneticButton>
+            </Link>
             <MagneticButton className="w-full sm:w-auto px-8 py-4 bg-slate-50 text-slate-900 rounded-full text-base font-semibold border border-slate-200 hover:border-slate-300 hover:bg-slate-100 transition-colors shadow-sm">
               Watch demo
             </MagneticButton>

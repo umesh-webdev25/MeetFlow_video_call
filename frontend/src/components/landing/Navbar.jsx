@@ -62,9 +62,11 @@ const Navbar = () => {
           <Link to="/login" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors">
             Log in
           </Link>
-          <MagneticButton className="px-5 py-2.5 bg-primary text-white rounded-full text-sm font-medium hover:bg-blue-700 transition-colors">
-            Start Free Trial
-          </MagneticButton>
+          <Link to="/signup">
+            <MagneticButton className="px-5 py-2.5 bg-primary text-white rounded-full text-sm font-medium hover:bg-blue-700 transition-colors">
+              Start Free Trial
+            </MagneticButton>
+          </Link>
         </div>
 
         {/* Mobile Toggle */}
