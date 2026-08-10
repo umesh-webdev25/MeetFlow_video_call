@@ -4,7 +4,16 @@ import daisyui from "daisyui";
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'brand': {
+          '50': '#EFF6FF',
+          '100': '#DBEAFE',
+          'primary': '#2563EB',
+          'hover': '#1D4ED8',
+        }
+      },
+    },
   },
   plugins: [daisyui],
   daisyui: {
