@@ -104,8 +104,8 @@ const BentoGridFeatures = () => {
           >
             <SpotlightCard className="h-full p-8 flex flex-col justify-between group">
               <div>
-                <div className="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-6">
-                  <LayoutDashboard className="w-6 h-6 text-brand-primary" />
+                <div className="w-20 h-20 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-6">
+                  <LayoutDashboard className="w-10 h-10 text-brand-primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-2">
                   Centralized Dashboard
@@ -117,37 +117,80 @@ const BentoGridFeatures = () => {
               </div>
 
               {/* Abstract Dashboard Visual */}
-              <div className="mt-8 relative h-48 bg-slate-50 rounded-xl border border-slate-200 overflow-hidden group-hover:border-brand-200 transition-colors p-5 shadow-inner">
+              <div className="mt-8 relative h-56 bg-slate-100 rounded-xl border border-slate-200 overflow-hidden group-hover:border-brand-300 transition-colors p-4 md:p-5 shadow-inner">
                 {/* Decorative background grid */}
-                <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:12px_12px]"></div>
+                <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:12px_12px]"></div>
 
-                <div className="flex gap-5 h-full relative z-10">
+                <div className="flex gap-4 h-full relative z-10">
                   {/* Sidebar */}
-                  <div className="w-1/4 h-full bg-white rounded-lg shadow-sm border border-slate-100 p-3 flex flex-col gap-3 group-hover:-translate-y-1 transition-transform duration-500 delay-75">
-                    <div className="h-3 w-3/4 bg-slate-200 rounded-full mb-2"></div>
-                    <div className="h-8 w-full bg-brand-50 rounded-lg flex items-center px-2">
-                      <div className="h-3 w-3 bg-brand-400 rounded-full"></div>
+                  <div className="w-1/4 h-full bg-white rounded-lg shadow-sm border border-slate-200 p-3 flex flex-col gap-2 group-hover:-translate-y-1 transition-transform duration-500 delay-75">
+                    <div className="h-3 w-3/4 bg-slate-300 rounded-full mb-2"></div>
+                    <div className="h-7 w-full bg-brand-50 border border-brand-100 rounded-md flex items-center px-2 shrink-0">
+                      <div className="h-2.5 w-2.5 bg-brand-500 rounded-sm"></div>
+                      <div className="h-2 w-1/2 bg-brand-500/50 rounded-full ml-2"></div>
                     </div>
-                    <div className="h-8 w-full bg-slate-50 rounded-lg flex items-center px-2">
-                      <div className="h-3 w-3 bg-slate-200 rounded-full"></div>
+                    <div className="h-7 w-full bg-slate-50 border border-slate-100 rounded-md flex items-center px-2 shrink-0">
+                      <div className="h-2.5 w-2.5 bg-slate-300 rounded-sm"></div>
+                      <div className="h-2 w-2/3 bg-slate-300 rounded-full ml-2"></div>
+                    </div>
+                    <div className="h-7 w-full bg-slate-50 border border-slate-100 rounded-md flex items-center px-2 shrink-0">
+                      <div className="h-2.5 w-2.5 bg-slate-300 rounded-sm"></div>
+                      <div className="h-2 w-1/2 bg-slate-300 rounded-full ml-2"></div>
                     </div>
                   </div>
+
                   {/* Main Content Area */}
-                  <div className="flex-1 flex flex-col gap-4 group-hover:-translate-y-1 transition-transform duration-500 delay-150">
+                  <div className="flex-1 h-full flex flex-col gap-4 group-hover:-translate-y-1 transition-transform duration-500 delay-150">
                     {/* Header */}
-                    <div className="w-full h-10 bg-white rounded-lg shadow-sm border border-slate-100 flex items-center px-4 justify-between shrink-0">
-                      <div className="h-3 w-1/3 bg-slate-200 rounded-full"></div>
-                      <div className="h-5 w-5 bg-slate-100 rounded-full"></div>
-                    </div>
-                    {/* Grid of items */}
-                    <div className="grid grid-cols-2 gap-3 flex-1 min-h-0">
-                      <div className="bg-white rounded-lg shadow-sm border border-slate-100 p-3 flex flex-col h-full">
-                        <div className="h-10 w-full bg-emerald-50 rounded-md shrink-0"></div>
-                        <div className="h-2 w-2/3 bg-slate-100 rounded-full mt-auto"></div>
+                    <div className="w-full h-10 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center px-4 justify-between shrink-0">
+                      <div className="flex items-center gap-3">
+                        <div className="h-4 w-4 bg-brand-500 rounded-full"></div>
+                        <div className="h-3 w-20 bg-slate-300 rounded-full"></div>
                       </div>
-                      <div className="bg-white rounded-lg shadow-sm border border-slate-100 p-3 flex flex-col h-full">
-                        <div className="h-10 w-full bg-amber-50 rounded-md shrink-0"></div>
-                        <div className="h-2 w-2/3 bg-slate-100 rounded-full mt-auto"></div>
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 w-8 bg-slate-200 rounded-full hidden sm:block"></div>
+                        <div className="h-6 w-6 bg-slate-100 border border-slate-200 rounded-full"></div>
+                      </div>
+                    </div>
+
+                    {/* Grid of items */}
+                    <div className="grid grid-cols-2 gap-4 flex-1 min-h-0">
+                      {/* Metric 1 */}
+                      <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-3 flex flex-col h-full relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="h-2 w-12 bg-slate-200 rounded-full"></div>
+                          <div className="h-3 w-3 bg-emerald-100 rounded-full flex items-center justify-center">
+                            <div className="h-1.5 w-1.5 bg-emerald-500 rounded-full"></div>
+                          </div>
+                        </div>
+                        <div className="h-5 w-16 bg-slate-800 rounded-md mb-auto mt-1"></div>
+                        <div className="h-10 w-full bg-emerald-50/50 rounded-md flex items-end p-1 gap-1 shrink-0">
+                          <div className="h-1/3 w-1/5 bg-emerald-300 rounded-t-sm"></div>
+                          <div className="h-2/3 w-1/5 bg-emerald-400 rounded-t-sm"></div>
+                          <div className="h-full w-1/5 bg-emerald-500 rounded-t-sm"></div>
+                          <div className="h-1/2 w-1/5 bg-emerald-300 rounded-t-sm"></div>
+                          <div className="h-3/4 w-1/5 bg-emerald-400 rounded-t-sm"></div>
+                        </div>
+                      </div>
+
+                      {/* Metric 2 */}
+                      <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-3 flex flex-col h-full relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="h-2 w-12 bg-slate-200 rounded-full"></div>
+                          <div className="h-3 w-3 bg-amber-100 rounded-full flex items-center justify-center">
+                            <div className="h-1.5 w-1.5 bg-amber-500 rounded-full"></div>
+                          </div>
+                        </div>
+                        <div className="h-5 w-16 bg-slate-800 rounded-md mb-auto mt-1"></div>
+                        <div className="h-10 w-full bg-amber-50/50 rounded-md flex items-end p-1 gap-1 shrink-0">
+                          <div className="h-3/4 w-1/5 bg-amber-400 rounded-t-sm"></div>
+                          <div className="h-1/2 w-1/5 bg-amber-300 rounded-t-sm"></div>
+                          <div className="h-2/3 w-1/5 bg-amber-400 rounded-t-sm"></div>
+                          <div className="h-1/3 w-1/5 bg-amber-300 rounded-t-sm"></div>
+                          <div className="h-full w-1/5 bg-amber-500 rounded-t-sm"></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -166,8 +209,8 @@ const BentoGridFeatures = () => {
           >
             <SpotlightCard className="h-full p-8 flex items-center group relative overflow-hidden">
               <div className="w-2/3 relative z-10 pr-4">
-                <div className="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
-                  <Video className="w-6 h-6 text-brand-primary drop-shadow-sm" />
+                <div className="w-20 h-20 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                  <Video className="w-10 h-10 text-brand-primary drop-shadow-sm" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">
                   Join instantly
@@ -201,8 +244,8 @@ const BentoGridFeatures = () => {
             <SpotlightCard className="h-full p-8 group overflow-hidden">
               <div className="flex items-center justify-between w-full h-full">
                 <div className="w-1/2 pr-4 z-10">
-                  <div className="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
-                    <Calendar className="w-6 h-6 text-brand-primary drop-shadow-sm" />
+                  <div className="w-20 h-20 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                    <Calendar className="w-10 h-10 text-brand-primary drop-shadow-sm" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">
                     Schedule in seconds
@@ -212,84 +255,81 @@ const BentoGridFeatures = () => {
                   </p>
                 </div>
                 <div className="w-1/2 flex justify-end items-center h-full relative z-10">
-  <div className="w-full max-w-[240px] bg-white rounded-xl shadow-lg border border-slate-200 p-3 flex flex-col gap-1.5">
+                  <div className="w-full max-w-[240px] bg-white rounded-xl shadow-lg border border-slate-200 p-3 flex flex-col gap-1.5">
+                    {/* Header */}
+                    <div className="flex justify-between items-center pb-1 border-b border-slate-100">
+                      <span className="text-sm font-bold text-slate-800">
+                        {currentMonth} {currentYear}
+                      </span>
 
-    {/* Header */}
-    <div className="flex justify-between items-center pb-1 border-b border-slate-100">
-      <span className="text-sm font-bold text-slate-800">
-        {currentMonth} {currentYear}
-      </span>
+                      <div className="flex gap-1">
+                        <div className="w-5 h-5 bg-slate-50 rounded border border-slate-100 flex items-center justify-center">
+                          <span className="text-[10px] text-slate-400">‹</span>
+                        </div>
 
-      <div className="flex gap-1">
-        <div className="w-5 h-5 bg-slate-50 rounded border border-slate-100 flex items-center justify-center">
-          <span className="text-[10px] text-slate-400">‹</span>
-        </div>
+                        <div className="w-5 h-5 bg-slate-50 rounded border border-slate-100 flex items-center justify-center">
+                          <span className="text-[10px] text-slate-400">›</span>
+                        </div>
+                      </div>
+                    </div>
 
-        <div className="w-5 h-5 bg-slate-50 rounded border border-slate-100 flex items-center justify-center">
-          <span className="text-[10px] text-slate-400">›</span>
-        </div>
-      </div>
-    </div>
+                    {/* Calendar */}
+                    <div>
+                      <div className="grid grid-cols-7 mb-0.5">
+                        {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
+                          <div
+                            key={d}
+                            className="text-[9px] font-bold text-slate-400 text-center"
+                          >
+                            {d}
+                          </div>
+                        ))}
+                      </div>
 
-    {/* Calendar */}
-    <div>
-      <div className="grid grid-cols-7 mb-0.5">
-        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-          <div
-            key={d}
-            className="text-[9px] font-bold text-slate-400 text-center"
-          >
-            {d}
-          </div>
-        ))}
-      </div>
+                      <div className="grid grid-cols-7 gap-y-0">
+                        {[...Array(firstDayOfMonth)].map((_, i) => (
+                          <div key={`offset-${i}`} className="h-5" />
+                        ))}
 
-      <div className="grid grid-cols-7 gap-y-0">
-        {[...Array(firstDayOfMonth)].map((_, i) => (
-          <div key={`offset-${i}`} className="h-5" />
-        ))}
+                        {[...Array(daysInMonth)].map((_, i) => {
+                          const day = i + 1;
 
-        {[...Array(daysInMonth)].map((_, i) => {
-          const day = i + 1;
+                          const isToday = day === currentDate;
+                          const hasMeeting =
+                            day === currentDate + 2 || day === currentDate + 5;
 
-          const isToday = day === currentDate;
-          const hasMeeting =
-            day === currentDate + 2 ||
-            day === currentDate + 5;
-
-          return (
-            <div
-              key={day}
-              className={`
+                          return (
+                            <div
+                              key={day}
+                              className={`
                 h-5 mx-0.5 rounded
                 flex items-center justify-center
                 text-[10px] font-medium
                 ${
                   isToday
-                    ? 'bg-brand-primary text-white shadow-sm'
+                    ? "bg-brand-primary text-white shadow-sm"
                     : hasMeeting
-                      ? 'bg-brand-50 text-brand-700'
-                      : 'text-slate-600'
+                      ? "bg-brand-50 text-brand-700"
+                      : "text-slate-600"
                 }
               `}
-            >
-              {day}
-            </div>
-          );
-        })}
-      </div>
-    </div>
+                            >
+                              {day}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
 
-    {/* Meeting */}
-    <div className="h-7 bg-brand-50 rounded-lg flex items-center px-2.5 gap-2 border border-brand-100/50">
-      <Video className="w-3 h-3 text-brand-primary shrink-0" />
-      <span className="text-[10px] font-medium text-brand-700 truncate">
-        Sync with Design Team
-      </span>
-    </div>
-
-  </div>
-</div>
+                    {/* Meeting */}
+                    <div className="h-8 bg-brand-50 rounded-lg flex items-center px-2.5 gap-2 border border-brand-100/50">
+                      <Video className="w-4 h-4 text-brand-primary shrink-0" />
+                      <span className="text-[10px] font-medium text-brand-700 truncate">
+                        Sync with Design Team
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </SpotlightCard>
           </motion.div>
@@ -303,8 +343,8 @@ const BentoGridFeatures = () => {
             className="md:col-span-1 lg:col-span-1 row-span-1"
           >
             <SpotlightCard className="h-full p-6 flex flex-col justify-center text-center items-center group">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 border border-emerald-200/50 flex items-center justify-center mb-5 group-hover:-translate-y-1 transition-transform duration-300 shadow-sm">
-                <Shield className="w-8 h-8 text-emerald-600 drop-shadow-sm" />
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 border border-emerald-200/50 flex items-center justify-center mb-5 group-hover:-translate-y-1 transition-transform duration-300 shadow-sm">
+                <Shield className="w-10 h-10 text-emerald-600 drop-shadow-sm" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-1">Secure</h3>
               <p className="text-sm text-slate-500">
@@ -321,8 +361,8 @@ const BentoGridFeatures = () => {
             className="md:col-span-1 lg:col-span-1 row-span-1"
           >
             <SpotlightCard className="h-full p-6 flex flex-col justify-center text-center items-center group">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-200/50 flex items-center justify-center mb-5 group-hover:-translate-y-1 transition-transform duration-300 shadow-sm">
-                <Users className="w-8 h-8 text-amber-600 drop-shadow-sm" />
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-200/50 flex items-center justify-center mb-5 group-hover:-translate-y-1 transition-transform duration-300 shadow-sm">
+                <Users className="w-10 h-10 text-amber-600 drop-shadow-sm" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-1">
                 Participant Mgmt
@@ -341,9 +381,9 @@ const BentoGridFeatures = () => {
             className="md:col-span-1 lg:col-span-2 row-span-1"
           >
             <SpotlightCard className="h-full p-8 group">
-              <div className="flex items-center gap-6 w-full h-full">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-50 to-brand-100/50 border border-brand-200/50 flex items-center justify-center shrink-0 group-hover:rotate-12 transition-transform duration-300 shadow-sm">
-                  <Bell className="w-8 h-8 text-brand-primary drop-shadow-sm" />
+              <div className="flex items-center gap-6 w-full h-full ">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-50 to-brand-100/50 border border-brand-200/50 flex items-center justify-center shrink-0 group-hover:rotate-12 transition-transform duration-300 shadow-sm">
+                  <Bell className="w-10 h-10 text-brand-primary drop-shadow-sm -translate-y-1" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">
