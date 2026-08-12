@@ -3,22 +3,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Users, Briefcase, Globe, Building2, CheckCircle2 } from "lucide-react";
 
 const tabs = [
-  { id: "individuals", label: "For Individuals", icon: Users, content: {
+  { id: "individuals", label: "For Individuals", icon: Users, image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop", content: {
       title: "Perfect for freelancers and consultants.",
       desc: "Set up a professional booking page in minutes. Let clients schedule time with you without the endless email threads.",
       features: ["Custom booking link", "Automated reminders", "Stripe integration for paid calls"]
   }},
-  { id: "teams", label: "For Teams", icon: Briefcase, content: {
+  { id: "teams", label: "For Teams", icon: Briefcase, image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1000&auto=format&fit=crop", content: {
       title: "Built for agile collaboration.",
       desc: "Align your team instantly. MeetFlow checks everyone's calendar and finds the perfect overlap for internal syncs.",
       features: ["Round-robin scheduling", "Team analytics", "Slack & MS Teams integration"]
   }},
-  { id: "remote", label: "For Remote Teams", icon: Globe, content: {
+  { id: "remote", label: "For Remote Teams", icon: Globe, image: "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=1000&auto=format&fit=crop", content: {
       title: "Bridge the distance.",
       desc: "High-quality video meetings designed to make remote collaboration feel like you're in the same room.",
       features: ["Ultra-low latency video", "Interactive whiteboarding", "Automated time-zone conversion"]
   }},
-  { id: "enterprise", label: "For Business", icon: Building2, content: {
+  { id: "enterprise", label: "For Business", icon: Building2, image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1000&auto=format&fit=crop", content: {
       title: "Enterprise-grade control.",
       desc: "Advanced security, compliance, and administration controls for organizations that need to scale securely.",
       features: ["SSO & SAML integration", "Role-based access control", "Dedicated success manager"]
@@ -92,10 +92,8 @@ const SolutionsTabs = () => {
                       ))}
                     </ul>
                   </div>
-                  <div className="bg-slate-50 rounded-2xl border border-slate-100 h-64 md:h-full min-h-[300px] flex items-center justify-center p-8">
-                     <div className="w-full h-full border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 font-medium">
-                        Interactive Demo Area
-                     </div>
+                  <div className="bg-slate-50 rounded-2xl border border-slate-100 h-64 md:h-full min-h-[300px] overflow-hidden">
+                     <img src={tab.image} alt={tab.content.title} className="w-full h-full object-cover" />
                   </div>
                 </motion.div>
               );

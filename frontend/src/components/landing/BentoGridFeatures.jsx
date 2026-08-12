@@ -115,16 +115,16 @@ const BentoGridFeatures = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="md:col-span-1 lg:col-span-2 row-span-1"
           >
-            <SpotlightCard className="h-full p-8 flex items-center justify-between group">
-              <div className="w-1/2 pr-4">
-                <div className="w-10 h-10 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-4">
-                  <Video className="w-5 h-5 text-brand-primary" />
+            <SpotlightCard className="h-full p-8 flex items-center group relative overflow-hidden">
+              <div className="w-2/3 relative z-10 pr-4">
+                <div className="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                  <Video className="w-6 h-6 text-brand-primary drop-shadow-sm" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">Join instantly</h3>
                 <p className="text-sm text-slate-600">High-quality, low-latency video meetings directly in your browser.</p>
               </div>
-              <div className="w-1/2 h-full flex justify-end items-center">
-                 <div className="w-32 h-32 rounded-full bg-slate-50 border-4 border-white shadow-lg overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
+              <div className="absolute -right-6 top-1/2 -translate-y-1/2 flex justify-end z-0">
+                 <div className="w-40 h-40 rounded-full bg-slate-50 border-4 border-white shadow-xl overflow-hidden relative group-hover:scale-105 transition-transform duration-500 shrink-0">
                     <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" alt="Video Call" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 border-2 border-brand-primary/20 rounded-full"></div>
                  </div>
@@ -171,12 +171,12 @@ const BentoGridFeatures = () => {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="md:col-span-1 lg:col-span-1 row-span-1"
           >
-            <SpotlightCard className="h-full p-6 flex flex-col justify-center text-center items-center">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-4">
-                <Shield className="w-5 h-5 text-emerald-600" />
+            <SpotlightCard className="h-full p-6 flex flex-col justify-center text-center items-center group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 border border-emerald-200/50 flex items-center justify-center mb-5 group-hover:-translate-y-1 transition-transform duration-300 shadow-sm">
+                <Shield className="w-8 h-8 text-emerald-600 drop-shadow-sm" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Secure</h3>
-              <p className="text-xs text-slate-500 mt-1">End-to-end encryption for all calls.</p>
+              <h3 className="text-xl font-bold text-slate-900 mb-1">Secure</h3>
+              <p className="text-sm text-slate-500">End-to-end encryption for all calls.</p>
             </SpotlightCard>
           </motion.div>
 
@@ -187,12 +187,12 @@ const BentoGridFeatures = () => {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="md:col-span-1 lg:col-span-1 row-span-1"
           >
-            <SpotlightCard className="h-full p-6 flex flex-col justify-center text-center items-center">
-              <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center mb-4">
-                <Users className="w-5 h-5 text-amber-600" />
+            <SpotlightCard className="h-full p-6 flex flex-col justify-center text-center items-center group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-200/50 flex items-center justify-center mb-5 group-hover:-translate-y-1 transition-transform duration-300 shadow-sm">
+                <Users className="w-8 h-8 text-amber-600 drop-shadow-sm" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Participant Mgmt</h3>
-              <p className="text-xs text-slate-500 mt-1">Granular control over who joins.</p>
+              <h3 className="text-xl font-bold text-slate-900 mb-1">Participant Mgmt</h3>
+              <p className="text-sm text-slate-500">Granular control over who joins.</p>
             </SpotlightCard>
           </motion.div>
           
@@ -203,13 +203,13 @@ const BentoGridFeatures = () => {
             transition={{ duration: 0.5, delay: 0.6 }}
             className="md:col-span-1 lg:col-span-2 row-span-1"
           >
-            <SpotlightCard className="h-full p-6 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center shrink-0">
-                <Bell className="w-6 h-6 text-brand-primary" />
+            <SpotlightCard className="h-full p-8 flex items-center gap-6 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-50 to-brand-100/50 border border-brand-200/50 flex items-center justify-center shrink-0 group-hover:rotate-12 transition-transform duration-300 shadow-sm">
+                <Bell className="w-8 h-8 text-brand-primary drop-shadow-sm" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900">Smart Reminders</h3>
-                <p className="text-sm text-slate-500 mt-1">Automated notifications ensure no one misses a meeting.</p>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Smart Reminders</h3>
+                <p className="text-slate-500">Automated notifications ensure no one misses a meeting.</p>
               </div>
             </SpotlightCard>
           </motion.div>
