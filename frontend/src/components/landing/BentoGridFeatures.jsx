@@ -116,81 +116,106 @@ const BentoGridFeatures = () => {
                 </p>
               </div>
 
-              {/* Abstract Dashboard Visual */}
-              <div className="mt-8 relative h-56 bg-slate-100 rounded-xl border border-slate-200 overflow-hidden group-hover:border-brand-300 transition-colors p-4 md:p-5 shadow-inner">
+              {/* Detailed SaaS Dashboard Visual */}
+              <div className="mt-2 relative h-60 bg-slate-50 rounded-xl border border-slate-200 overflow-hidden group-hover:border-brand-300 transition-colors shadow-inner flex font-sans text-slate-800">
                 {/* Decorative background grid */}
-                <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:12px_12px]"></div>
+                <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:16px_16px]"></div>
 
-                <div className="flex gap-4 h-full relative z-10">
-                  {/* Sidebar */}
-                  <div className="w-1/4 h-full bg-white rounded-lg shadow-sm border border-slate-200 p-3 flex flex-col gap-2 group-hover:-translate-y-1 transition-transform duration-500 delay-75">
-                    <div className="h-3 w-3/4 bg-slate-300 rounded-full mb-2"></div>
-                    <div className="h-7 w-full bg-brand-50 border border-brand-100 rounded-md flex items-center px-2 shrink-0">
-                      <div className="h-2.5 w-2.5 bg-brand-500 rounded-sm"></div>
-                      <div className="h-2 w-1/2 bg-brand-500/50 rounded-full ml-2"></div>
+                {/* Left Sidebar */}
+                <div className="w-1/3 max-w-[170px] bg-white border-r border-slate-200 p-4 flex flex-col gap-4 relative z-10 shrink-0">
+                  {/* User Profile */}
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-slate-200 overflow-hidden border border-slate-300 shrink-0 flex items-center justify-center">
+                       <svg className="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
                     </div>
-                    <div className="h-7 w-full bg-slate-50 border border-slate-100 rounded-md flex items-center px-2 shrink-0">
-                      <div className="h-2.5 w-2.5 bg-slate-300 rounded-sm"></div>
-                      <div className="h-2 w-2/3 bg-slate-300 rounded-full ml-2"></div>
-                    </div>
-                    <div className="h-7 w-full bg-slate-50 border border-slate-100 rounded-md flex items-center px-2 shrink-0">
-                      <div className="h-2.5 w-2.5 bg-slate-300 rounded-sm"></div>
-                      <div className="h-2 w-1/2 bg-slate-300 rounded-full ml-2"></div>
+                    <span className="text-[11px] font-bold text-slate-700 truncate">Admin User</span>
+                  </div>
+                  {/* Search Bar */}
+                  <div className="w-full h-8 bg-slate-50 border border-slate-200 rounded-md flex items-center px-2 gap-2 text-slate-400">
+                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                     <span className="text-[10px]">Search...</span>
+                  </div>
+                  {/* Navigation Menu */}
+                  <div className="flex flex-col  flex-1 mt-1">
+                    <div className="text-[10px] font-semibold text-brand-700 bg-brand-50 border border-brand-100 px-2 py-1.5 rounded flex items-center">Sales Overview</div>
+                    <div className="text-[10px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 px-2 py-1.5 rounded flex items-center transition-colors">Marketing Analytics</div>
+                    <div className="text-[10px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 px-2 py-1.5 rounded flex items-center transition-colors">Inventory Logs</div>
+                    <div className="text-[10px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 px-2 py-1.5 rounded flex items-center transition-colors">User Reports</div>
+                    <div className="text-[10px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 px-2 py-1.5 rounded flex items-center transition-colors">System Settings</div>
+                    <div className="text-[10px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 px-2 py-1.5 rounded flex items-center transition-colors">Team Management</div>
+                  </div>
+                </div>
+
+                {/* Main Dashboard Area */}
+                <div className="flex-1 flex flex-col relative z-10 bg-slate-50/50 backdrop-blur-sm">
+                  {/* Top Header */}
+                  <div className="h-14 border-b border-slate-200 bg-white/90 flex items-center justify-between px-5 shrink-0">
+                    <h2 className="text-sm font-bold text-slate-800">Real-Time Revenue</h2>
+                    <div className="flex items-center gap-3">
+                      <div className="h-7 px-3 bg-white border border-slate-200 rounded-md flex items-center text-[9px] font-medium text-slate-600 shadow-sm">
+                        Oct 01 - Oct 31, 2023
+                      </div>
+                      <div className="w-7 h-7 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center">
+                         <span className="text-[9px] font-bold text-slate-500">AU</span>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Main Content Area */}
-                  <div className="flex-1 h-full flex flex-col gap-4 group-hover:-translate-y-1 transition-transform duration-500 delay-150">
-                    {/* Header */}
-                    <div className="w-full h-10 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center px-4 justify-between shrink-0">
-                      <div className="flex items-center gap-3">
-                        <div className="h-4 w-4 bg-brand-500 rounded-full"></div>
-                        <div className="h-3 w-20 bg-slate-300 rounded-full"></div>
+                  
+                  {/* Cards Area */}
+                  <div className="flex-1 p-4 flex gap-4 h-full">
+                    {/* Left Card: Revenue */}
+                    <div className="flex-1 bg-white rounded-lg shadow-sm border border-slate-200 flex flex-col overflow-hidden relative group-hover:-translate-y-1 transition-transform duration-500 delay-75">
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+                      <div className="p-3 pb-1 pl-4">
+                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Monthly Revenue (USD)</div>
+                        <div className="text-xl font-bold text-slate-800 mt-0.5">2,450,000</div>
+                        <div className="text-[9px] font-medium text-emerald-600 mt-0.5">vs. Previous Month (+15%)</div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="h-2 w-8 bg-slate-200 rounded-full hidden sm:block"></div>
-                        <div className="h-6 w-6 bg-slate-100 border border-slate-200 rounded-full"></div>
+                      <div className="flex-1 mt-3 mx-4 mb-3 flex items-end gap-2 relative border-b border-l border-slate-100 pl-1">
+                        {/* Grid lines */}
+                        <div className="absolute left-1 right-0 top-0 border-t border-slate-100 border-dashed"></div>
+                        <div className="absolute left-1 right-0 top-1/2 border-t border-slate-100 border-dashed"></div>
+                        <div className="absolute left-1 right-0 top-1/4 border-t border-slate-100 border-dashed"></div>
+                        <div className="absolute left-1 right-0 top-3/4 border-t border-slate-100 border-dashed"></div>
+                        {/* Bars */}
+                        {[40, 60, 45, 80, 65, 95].map((h, i) => (
+                           <div key={i} className="flex-1 flex flex-col justify-end group/bar cursor-pointer h-full gap-0.5 relative z-10">
+                             <div className="w-full bg-teal-300 rounded-t-sm transition-all" style={{height: `${h * 0.3}%`}}></div>
+                             <div className="w-full bg-emerald-500 rounded-b-sm transition-all" style={{height: `${h * 0.7}%`}}></div>
+                           </div>
+                        ))}
+                        {/* Axis labels */}
+                        <div className="absolute -left-6 bottom-[-4px] text-[6px] text-slate-400 font-medium bg-white pr-1">0M</div>
+                        <div className="absolute -left-7 top-[48%] -translate-y-1/2 text-[6px] text-slate-400 font-medium bg-white pr-1">1.25M</div>
+                        <div className="absolute -left-7 top-[-4px] text-[6px] text-slate-400 font-medium bg-white pr-1">2.5M</div>
                       </div>
                     </div>
 
-                    {/* Grid of items */}
-                    <div className="grid grid-cols-2 gap-4 flex-1 min-h-0">
-                      {/* Metric 1 */}
-                      <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-3 flex flex-col h-full relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
-                        <div className="flex justify-between items-start mb-2">
-                          <div className="h-2 w-12 bg-slate-200 rounded-full"></div>
-                          <div className="h-3 w-3 bg-emerald-100 rounded-full flex items-center justify-center">
-                            <div className="h-1.5 w-1.5 bg-emerald-500 rounded-full"></div>
-                          </div>
-                        </div>
-                        <div className="h-5 w-16 bg-slate-800 rounded-md mb-auto mt-1"></div>
-                        <div className="h-10 w-full bg-emerald-50/50 rounded-md flex items-end p-1 gap-1 shrink-0">
-                          <div className="h-1/3 w-1/5 bg-emerald-300 rounded-t-sm"></div>
-                          <div className="h-2/3 w-1/5 bg-emerald-400 rounded-t-sm"></div>
-                          <div className="h-full w-1/5 bg-emerald-500 rounded-t-sm"></div>
-                          <div className="h-1/2 w-1/5 bg-emerald-300 rounded-t-sm"></div>
-                          <div className="h-3/4 w-1/5 bg-emerald-400 rounded-t-sm"></div>
-                        </div>
+                    {/* Right Card: Activity */}
+                    <div className="flex-1 bg-white rounded-lg shadow-sm border border-slate-200 flex flex-col overflow-hidden relative group-hover:-translate-y-1 transition-transform duration-500 delay-150">
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500"></div>
+                      <div className="p-3 pb-1 pl-4">
+                        <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">User Activity (Daily Active)</div>
+                        <div className="text-xl font-bold text-slate-800 mt-0.5">12,580</div>
+                        <div className="text-[9px] font-medium text-rose-500 mt-0.5">vs. Previous Month (-5%)</div>
                       </div>
-
-                      {/* Metric 2 */}
-                      <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-3 flex flex-col h-full relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
-                        <div className="flex justify-between items-start mb-2">
-                          <div className="h-2 w-12 bg-slate-200 rounded-full"></div>
-                          <div className="h-3 w-3 bg-amber-100 rounded-full flex items-center justify-center">
-                            <div className="h-1.5 w-1.5 bg-amber-500 rounded-full"></div>
-                          </div>
-                        </div>
-                        <div className="h-5 w-16 bg-slate-800 rounded-md mb-auto mt-1"></div>
-                        <div className="h-10 w-full bg-amber-50/50 rounded-md flex items-end p-1 gap-1 shrink-0">
-                          <div className="h-3/4 w-1/5 bg-amber-400 rounded-t-sm"></div>
-                          <div className="h-1/2 w-1/5 bg-amber-300 rounded-t-sm"></div>
-                          <div className="h-2/3 w-1/5 bg-amber-400 rounded-t-sm"></div>
-                          <div className="h-1/3 w-1/5 bg-amber-300 rounded-t-sm"></div>
-                          <div className="h-full w-1/5 bg-amber-500 rounded-t-sm"></div>
-                        </div>
+                      <div className="flex-1 mt-3 mx-4 mb-3 flex items-end gap-1.5 relative border-b border-l border-slate-100 pl-1">
+                        {/* Grid lines */}
+                        <div className="absolute left-1 right-0 top-0 border-t border-slate-100 border-dashed"></div>
+                        <div className="absolute left-1 right-0 top-1/2 border-t border-slate-100 border-dashed"></div>
+                        <div className="absolute left-1 right-0 top-1/4 border-t border-slate-100 border-dashed"></div>
+                        <div className="absolute left-1 right-0 top-3/4 border-t border-slate-100 border-dashed"></div>
+                        {/* Bars */}
+                        {[85, 70, 90, 50, 45, 60, 40, 75, 80].map((h, i) => (
+                           <div key={i} className="flex-1 flex flex-col justify-end group/bar cursor-pointer h-full gap-0.5 relative z-10">
+                             <div className="w-full bg-amber-300 rounded-t-sm transition-all" style={{height: `${h * 0.4}%`}}></div>
+                             <div className="w-full bg-orange-500 rounded-b-sm transition-all" style={{height: `${h * 0.6}%`}}></div>
+                           </div>
+                        ))}
+                        {/* Axis labels */}
+                        <div className="absolute -left-4 bottom-[-4px] text-[6px] text-slate-400 font-medium bg-white pr-1">0</div>
+                        <div className="absolute -left-6 top-[48%] -translate-y-1/2 text-[6px] text-slate-400 font-medium bg-white pr-1">7.5K</div>
+                        <div className="absolute -left-6 top-[-4px] text-[6px] text-slate-400 font-medium bg-white pr-1">15K</div>
                       </div>
                     </div>
                   </div>
