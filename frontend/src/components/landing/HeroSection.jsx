@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
 import { Link } from "react-router-dom";
+import CubesBackground from "./CubesBackground";
 
 const HeroSection = () => {
   return (
@@ -17,6 +18,9 @@ const HeroSection = () => {
 
       {/* 2. Soft Ambient Blue Glow (anchored behind where the product visual will go below) */}
       <div className="absolute top-[60%] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand-primary/20 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+
+      {/* 3. Interactive 3D Cubes Background */}
+      <CubesBackground color="#64748b" opacity={0.22} count={24} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center max-w-4xl mx-auto">
