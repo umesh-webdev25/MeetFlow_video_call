@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-white">
+    <section className="relative min-h-screen w-full flex flex-col justify-center pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-white ">
       {/* 1. React Bits Re-skinned: Dot Grid Background (faint #DBEAFE on #FFFFFF) */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-20"

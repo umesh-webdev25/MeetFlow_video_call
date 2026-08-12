@@ -23,15 +23,15 @@ const LandingPage = () => {
       <Navbar />
       <main>
         <HeroSection />
-        <HeroProductVisual />
+        {/* <HeroProductVisual /> */}
+        <VideoMeetingExperience />
         <Storytelling />
         <BentoGridFeatures />
         <SchedulingExperience />
-        <VideoMeetingExperience />
         <DashboardShowcase />
         <SolutionsTabs />
         <HowItWorks />
-        <Testimonials />
+        {/* <Testimonials /> */}
         <BottomCTA />
       </main>
       <Footer />
