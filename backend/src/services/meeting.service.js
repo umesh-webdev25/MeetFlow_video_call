@@ -182,7 +182,12 @@ class MeetingService {
 
     const existing = await meetingRepository.findActiveMeetingByGroup(groupId);
     if (existing) {
-      throw new AppError("Meeting already running for this group", 409, { existingCode: existing.meetingCode });
+      // If the meeting is stale (no active participants), auto-end it and allow re-creation
+      if ((existing.activeParticipants || 0) === 0) {
+        await meetingRepository.endMeetingById(existing._id);
+      } else {
+        throw new AppError("Meeting already running for this group", 409, { existingCode: existing.meetingCode });
+      }
     }
 
     const meetingCode = "GRP-" + crypto.randomBytes(3).toString("hex").toUpperCase();
@@ -277,7 +282,12 @@ class MeetingService {
     // Check if there's already an active meeting for this group
     const existing = await meetingRepository.findActiveMeetingByGroup(groupId);
     if (existing) {
-      throw new AppError("An active meeting is already running for this group", 409, { existingCode: existing.meetingCode });
+      // If the meeting is stale (no active participants), auto-end it and allow re-creation
+      if ((existing.activeParticipants || 0) === 0) {
+        await meetingRepository.endMeetingById(existing._id);
+      } else {
+        throw new AppError("An active meeting is already running for this group", 409, { existingCode: existing.meetingCode });
+      }
     }
 
     // No active meeting exists, so we create one using createGroupMeeting

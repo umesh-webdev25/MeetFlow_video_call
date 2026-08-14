@@ -237,7 +237,9 @@ const MeetingRoomPage = () => {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      handleBeforeUnload(); // Call on unmount
+      // NOTE: Do NOT call handleBeforeUnload() here — this fires on every React unmount
+      // (including when the host clicks "End for everyone"), causing a spurious leave
+      // request that can interfere with meeting state. The beacon is only for tab close.
     };
   }, [activeMeeting?.meetingCode, meetingData?.meetingCode]);
 

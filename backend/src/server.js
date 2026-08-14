@@ -41,7 +41,7 @@ const __dirname = path.resolve();
 app.use(helmet());
 
 // Dynamic CORS configuration supporting local development and multiple deployed origins
-const frontendUrls = (process.env.FRONTEND_URL || "http://localhost:3000")
+const frontendUrls = (process.env.FRONTEND_URL || "http://localhost:3000", "http://192.168.29.78:3000")
   .split(",")
   .map(url => url.trim());
 
