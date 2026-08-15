@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import useAuthUser from "../hooks/useAuthUser";
 import { useQuery } from "@tanstack/react-query";
-import { getStreamToken, getMeeting } from "../lib/api";
+import { getStreamToken, getMeeting, endMeeting } from "../lib/api";
 import {
   StreamVideo,
   StreamVideoClient,
@@ -212,6 +212,12 @@ const MeetingRoomPage = () => {
         } catch (err) {
           console.error("Failed to end group meeting record:", err);
         }
+      } else if (roomId) {
+        try {
+          await endMeeting(roomId);
+        } catch (err) {
+          console.error("Failed to end ad-hoc meeting record:", err);
+        }
       }
       await callRef.current.endCall();
     } else if (callRef.current) {
@@ -255,7 +261,7 @@ const MeetingRoomPage = () => {
             The administrator has ended the meeting. All participants have been disconnected from the video call.
           </p>
           <button 
-            onClick={() => navigate("/meeting/lobby")}
+            onClick={() => navigate("/meeting/lobby", { replace: true })}
             className="btn btn-primary mt-6 w-full rounded-2xl font-black h-14"
           >
             Return to Lobby
@@ -333,7 +339,7 @@ const MeetingRoomPage = () => {
                 Retry Connection
               </button>
               <button
-                onClick={() => navigate("/meeting/lobby")}
+                onClick={() => navigate("/meeting/lobby", { replace: true })}
                 className="btn btn-ghost border border-white/10 flex-1 h-14 rounded-2xl font-black"
               >
                 Back to Lobby
@@ -467,15 +473,15 @@ const MeetingRoomContent = ({
   );
 
   useEffect(() => {
-    if (callingState === CallingState.LEFT) {
+    if (callingState === CallingState.LEFT && !isHost) {
       // If the meeting was ended by host, the parent will unmount this component anyway.
-      // We give it a short delay to allow the socket event to trigger `endedByHost`.
+      // We give it a short delay to allow the socket event to trigger `endedByHost` for members.
       const timer = setTimeout(() => {
-        navigate("/meeting/lobby");
+        navigate("/meeting/lobby", { replace: true });
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [callingState, navigate]);
+  }, [callingState, navigate, isHost]);
 
   const raiseHand = () => {
     const id = localParticipant?.sessionId;
@@ -502,14 +508,18 @@ const MeetingRoomContent = ({
           <div className="flex items-center gap-2 sm:gap-3 pointer-events-auto">
             <button
               onClick={() => {
-                if (remoteParticipants.length > 0) {
+                if (isHost) {
+                  // Host must use the End Meeting modal
                   setShowLeaveModal(true);
+                } else if (remoteParticipants.length > 0) {
+                  // Member: leave immediately without modal
+                  onEndCall(false).then(() => navigate("/meeting/lobby", { replace: true }));
                 } else {
-                  navigate("/meeting/lobby");
+                  navigate("/meeting/lobby", { replace: true });
                 }
               }}
               className="btn btn-ghost btn-circle btn-xs sm:btn-sm glass-dark border-white/5 hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
-              title="Back to lobby"
+              title={isHost ? "End Meeting" : "Leave Meeting"}
             >
               <ArrowLeftIcon className="size-3 sm:size-4" />
             </button>
@@ -853,9 +863,17 @@ const MeetingRoomContent = ({
               {/* Divider */}
               <div className="h-8 w-px bg-white/10 mx-1" />
 
-              {/* END CALL */}
+              {/* END / LEAVE CALL */}
               <button
-                onClick={() => setShowLeaveModal(true)}
+                onClick={() => {
+                  if (isHost) {
+                    // Host always gets a confirmation modal (ends for everyone)
+                    setShowLeaveModal(true);
+                  } else {
+                    // Member leaves immediately — no modal, no end-for-everyone option
+                    onEndCall(false).then(() => navigate("/meeting/lobby", { replace: true }));
+                  }
+                }}
                 className={cn(
                   `
             rounded-full
@@ -926,17 +944,15 @@ const MeetingRoomContent = ({
           )}
         </AnimatePresence>
 
-        {/* LEAVE MODAL */}
+        {/* END MEETING MODAL (host only) */}
         <AnimatePresence>
-          {showLeaveModal && (
+          {showLeaveModal && isHost && (
             <LeaveMeetingModal
-              isHost={isHost}
-              onConfirm={async (endForEveryone) => {
+              isHost={true}
+              onConfirm={async () => {
+                // Host always ends for everyone — endForEveryone is always true
                 setShowLeaveModal(false);
-                await onEndCall(endForEveryone);
-                if (!endForEveryone) {
-                  navigate("/meeting/lobby");
-                }
+                await onEndCall(true);
               }}
               onCancel={() => setShowLeaveModal(false)}
             />

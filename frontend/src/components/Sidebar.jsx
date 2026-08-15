@@ -24,8 +24,7 @@ const Sidebar = () => {
   const { authUser } = useAuthUser();
   const location = useLocation();
   const navigate = useNavigate();
-
-  console.log(authUser?.profilePic);
+  
   const currentPath = location.pathname;
 
   const { logoutMutation } = useLogout();
@@ -164,10 +163,9 @@ const Sidebar = () => {
       </nav>
 
       {/* USER PROFILE */}
-      <div className="p-3 border-t border-base-200 relative">
+      <div ref={dropdownRef} className="p-3 border-t border-base-200 relative">
         {/* PROFILE CARD */}
         <div
-          ref={dropdownRef}
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           className={cn(
             "flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 cursor-pointer border",
@@ -246,7 +244,7 @@ const Sidebar = () => {
 
               {/* Logout */}
               <button
-                onClick={logoutMutation}
+                onClick={() => logoutMutation()}
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-error/10 transition-colors text-left text-error"
               >
                 <LogOutIcon className="size-4" />

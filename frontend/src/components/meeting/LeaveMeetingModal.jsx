@@ -1,12 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import {
-  PhoneOffIcon,
   XIcon,
   LogOutIcon,
   BanIcon,
-  ArrowLeftIcon,
-  UsersIcon,
   ShieldAlertIcon,
   ChevronRightIcon,
 } from "lucide-react";
@@ -27,11 +24,19 @@ const itemVariants = {
   exit: { y: -10, opacity: 0, scale: 0.95 },
 };
 
+/**
+ * LeaveMeetingModal
+ *
+ * Role-based exit modal:
+ *  - Host   → can ONLY "End for everyone"  (no leave-only option)
+ *  - Member → can ONLY "Leave meeting"      (no end-for-everyone option)
+ *
+ * Props:
+ *  onConfirm(endForEveryone: boolean) — called with true for host end, false for member leave
+ *  onCancel()                         — closes the modal
+ *  isHost: boolean                    — determines which UI is shown
+ */
 const LeaveMeetingModal = ({ onConfirm, onCancel, isHost }) => {
-  const confirmLeave = (endForEveryone = false) => {
-    onConfirm(endForEveryone);
-  };
-
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") onCancel();
@@ -80,12 +85,23 @@ const LeaveMeetingModal = ({ onConfirm, onCancel, isHost }) => {
 
         {/* ICON */}
         <motion.div variants={itemVariants} className="flex justify-center mb-2">
-          <div className="size-16 sm:size-20 rounded-full bg-gradient-to-br from-error/20 to-error/10 flex items-center justify-center ring-8 ring-error/5">
+          <div
+            className={cn(
+              "size-16 sm:size-20 rounded-full flex items-center justify-center ring-8",
+              isHost
+                ? "bg-gradient-to-br from-error/20 to-error/10 ring-error/5"
+                : "bg-gradient-to-br from-white/10 to-white/5 ring-white/5"
+            )}
+          >
             <motion.div
               animate={{ rotate: [0, -10, 10, -5, 0] }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <PhoneOffIcon className="size-7 sm:size-9 text-error" />
+              {isHost ? (
+                <BanIcon className="size-7 sm:size-9 text-error" />
+              ) : (
+                <LogOutIcon className="size-7 sm:size-9 text-white/60" />
+              )}
             </motion.div>
           </div>
         </motion.div>
@@ -96,18 +112,43 @@ const LeaveMeetingModal = ({ onConfirm, onCancel, isHost }) => {
             {isHost ? "End Meeting?" : "Leave Meeting?"}
           </h3>
           <p className="text-sm text-white/40 font-medium leading-relaxed">
-            {isHost 
-              ? "Disconnect all participants and end the call immediately." 
-              : "Exit this meeting. Other participants will remain connected."}
+            {isHost
+              ? "This will disconnect all participants and permanently close the meeting for everyone."
+              : "You will exit the call. Other participants will remain connected."}
           </p>
         </motion.div>
 
-        {/* OPTIONS */}
+        {/* ACTION BUTTON — role-gated */}
         <motion.div variants={itemVariants} className="space-y-2.5">
-          {/* LEAVE FOR ME */}
-          {!isHost && (
+          {isHost ? (
+            /* HOST — End for Everyone only */
+            <>
+              <button
+                onClick={() => onConfirm(true)}
+                className="w-full group flex items-center gap-4 p-4 rounded-2xl bg-error/5 hover:bg-error/15 border border-error/10 hover:border-error/40 transition-all text-left"
+              >
+                <div className="size-10 rounded-xl bg-error/10 group-hover:bg-error/20 flex items-center justify-center shrink-0 transition-colors">
+                  <BanIcon className="size-5 text-error group-hover:text-error/80 transition-colors" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-error/90 group-hover:text-error transition-colors">
+                    End for everyone
+                  </p>
+                  <p className="text-xs text-white/30 group-hover:text-white/50 transition-colors mt-0.5">
+                    All participants will be disconnected immediately
+                  </p>
+                </div>
+                <ShieldAlertIcon className="size-4 text-error/40 group-hover:text-error/70 transition-colors shrink-0" />
+              </button>
+
+              <p className="text-[10px] text-white/20 text-center px-2 pt-1">
+                As the host, you must end the meeting for everyone to leave
+              </p>
+            </>
+          ) : (
+            /* MEMBER — Leave only */
             <button
-              onClick={() => confirmLeave(false)}
+              onClick={() => onConfirm(false)}
               className="w-full group flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 transition-all text-left"
             >
               <div className="size-10 rounded-xl bg-white/5 group-hover:bg-white/10 flex items-center justify-center shrink-0 transition-colors">
@@ -115,44 +156,15 @@ const LeaveMeetingModal = ({ onConfirm, onCancel, isHost }) => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-white group-hover:text-white/90 transition-colors">
-                  Leave for me
+                  Leave meeting
                 </p>
                 <p className="text-xs text-white/30 group-hover:text-white/40 transition-colors mt-0.5">
-                  You leave; others stay in the meeting
+                  You leave — others stay in the call
                 </p>
               </div>
-              <ChevronRightIcon className="size-4 text-white/20 group-hover:text-white/40 transition-colors shrink-0" />
+              <ChevronRightIcon className="size-4 text-white/20 group-hover:text-white/50 transition-colors shrink-0" />
             </button>
           )}
-
-          {/* END FOR EVERYONE (host only) */}
-          {isHost && (
-            <button
-              onClick={() => confirmLeave(true)}
-              className="w-full group flex items-center gap-4 p-4 rounded-2xl bg-error/5 hover:bg-error/10 border border-error/10 hover:border-error/30 transition-all text-left"
-            >
-              <div className="size-10 rounded-xl bg-error/10 group-hover:bg-error/20 flex items-center justify-center shrink-0 transition-colors">
-                <BanIcon className="size-5 text-error group-hover:text-error/80 transition-colors" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-error/90 group-hover:text-error transition-colors">
-                  End for everyone
-                </p>
-                <p className="text-xs text-white/30 group-hover:text-white/40 transition-colors mt-0.5">
-                  Disconnect all participants immediately
-                </p>
-              </div>
-              <ShieldAlertIcon className="size-4 text-error/40 group-hover:text-error/60 transition-colors shrink-0" />
-            </button>
-          )}
-
-          {/* PARTICIPANT COUNT */}
-          <div className="flex items-center gap-2 px-1 pt-1">
-            <UsersIcon className="size-3 text-white/20" />
-            <span className="text-[10px] text-white/20 font-medium">
-              Other participants will be notified
-            </span>
-          </div>
         </motion.div>
 
         {/* FOOTER */}
