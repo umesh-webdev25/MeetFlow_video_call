@@ -12,6 +12,8 @@ import HowItWorks from "../components/landing/HowItWorks";
 import Testimonials from "../components/landing/Testimonials";
 import BottomCTA from "../components/landing/BottomCTA";
 import Footer from "../components/landing/Footer";
+import Integrations from "../components/landing/Integrations";
+import Pricing from "../components/landing/Pricing";
 
 const LandingPage = () => {
   useEffect(() => {
@@ -31,6 +33,8 @@ const LandingPage = () => {
         <DashboardShowcase />
         <SolutionsTabs />
         <HowItWorks />
+        <Integrations />
+        <Pricing />
         {/* <Testimonials /> */}
         <BottomCTA />
       </main>
