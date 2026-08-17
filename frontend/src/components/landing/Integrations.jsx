@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Plug, Zap, MessageSquare, Calendar, Database, Cloud, Shield, Settings } from "lucide-react";
+import TargetCursor from "./TargetCursor";
 
 const tools = [
   { name: 'Slack', icon: MessageSquare, color: 'text-purple-500', bg: 'bg-purple-500/10' },
@@ -32,8 +33,25 @@ const itemVariants = {
 };
 
 const Integrations = () => {
+  const [isHovering, setIsHovering] = useState(false);
+
   return (
-    <section className="py-24 md:py-32 bg-slate-50 relative overflow-hidden" id="integrations">
+    <section 
+      className="py-24 md:py-32 bg-slate-50 relative overflow-hidden" 
+      id="integrations"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      {isHovering && (
+        <TargetCursor
+          spinDuration={2}
+          hideDefaultCursor={true}
+          parallaxOn={true}
+          cursorColor="#3b82f6"
+          cursorColorOnTarget="#0ea5e9"
+        />
+      )}
+      
       {/* Background decoration */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-primary/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
       
@@ -72,7 +90,7 @@ const Integrations = () => {
                 key={index}
                 variants={itemVariants}
                 whileHover={{ y: -5, scale: 1.02 }}
-                className="group relative p-8 border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-xl hover:border-brand-100 transition-all cursor-pointer flex flex-col items-center justify-center text-center overflow-hidden"
+                className="cursor-target group relative p-8 border border-slate-200 rounded-2xl bg-white shadow-sm hover:shadow-xl hover:border-brand-100 transition-all cursor-pointer flex flex-col items-center justify-center text-center overflow-hidden"
               >
                 {/* Hover Glow */}
                 <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${tool.bg}`}></div>
