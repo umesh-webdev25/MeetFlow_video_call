@@ -3,6 +3,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Video, Calendar, Shield, PlayCircle, BarChart } from "lucide-react";
 import { Link } from "react-router-dom";
 
+const handleSmoothScroll = (e, link) => {
+  if (link && link.startsWith('#')) {
+    const element = document.querySelector(link);
+    if (element) {
+      e.preventDefault();
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+};
+
 const MegaMenu = ({ title, items, isOpen }) => {
   return (
     <div className="relative group">
@@ -27,15 +37,7 @@ const MegaMenu = ({ title, items, isOpen }) => {
                 <Link
                   key={idx}
                   to={item.link}
-                  onClick={(e) => {
-                    if (item.link.startsWith('#')) {
-                      const element = document.querySelector(item.link);
-                      if (element) {
-                        e.preventDefault();
-                        element.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }
-                  }}
+                  onClick={(e) => handleSmoothScroll(e, item.link)}
                   className="flex items-start gap-4 p-3 rounded-xl hover:bg-brand-50 transition-colors group/item"
                 >
                   <div className="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 group-hover/item:border-brand-100 group-hover/item:bg-white transition-colors">
@@ -75,8 +77,8 @@ const Navbar = () => {
   ];
 
   const solutionsItems = [
-    { icon: PlayCircle, title: "For Teams", desc: "Keep remote teams deeply connected", link: "#" },
-    { icon: Shield, title: "For Enterprise", desc: "Bank-level security and controls", link: "#" },
+    { icon: PlayCircle, title: "For Teams", desc: "Keep remote teams deeply connected", link: "#solutions" },
+    { icon: Shield, title: "For Enterprise", desc: "Bank-level security and controls", link: "#solutions" },
   ];
 
   return (
@@ -112,12 +114,12 @@ const Navbar = () => {
             <MegaMenu title="Solutions" items={solutionsItems} isOpen={activeMenu === 'solutions'} />
           </div>
           
-          <Link to="#pricing" className="relative group px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-primary transition-colors">
+          <Link to="#pricing" onClick={(e) => handleSmoothScroll(e, '#pricing')} className="relative group px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-primary transition-colors">
             Pricing
             <span className="absolute bottom-1 left-4 w-0 h-0.5 bg-brand-primary transition-all duration-300 group-hover:w-[calc(100%-2rem)]"></span>
           </Link>
-          <Link to="#resources" className="relative group px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-primary transition-colors">
-            Resources
+          <Link to="#integrations" onClick={(e) => handleSmoothScroll(e, '#integrations')} className="relative group px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-primary transition-colors">
+            Integrations
             <span className="absolute bottom-1 left-4 w-0 h-0.5 bg-brand-primary transition-all duration-300 group-hover:w-[calc(100%-2rem)]"></span>
           </Link>
         </nav>
@@ -153,9 +155,9 @@ const Navbar = () => {
             className="md:hidden bg-white border-b border-slate-100 overflow-hidden"
           >
             <div className="px-6 py-6 flex flex-col gap-4">
-              <Link to="#product" className="text-lg font-semibold text-slate-800" onClick={() => setMobileMenuOpen(false)}>Product</Link>
-              <Link to="#solutions" className="text-lg font-semibold text-slate-800" onClick={() => setMobileMenuOpen(false)}>Solutions</Link>
-              <Link to="#pricing" className="text-lg font-semibold text-slate-800" onClick={() => setMobileMenuOpen(false)}>Pricing</Link>
+              <Link to="#video" className="text-lg font-semibold text-slate-800" onClick={(e) => { setMobileMenuOpen(false); handleSmoothScroll(e, '#video'); }}>Product</Link>
+              <Link to="#solutions" className="text-lg font-semibold text-slate-800" onClick={(e) => { setMobileMenuOpen(false); handleSmoothScroll(e, '#solutions'); }}>Solutions</Link>
+              <Link to="#pricing" className="text-lg font-semibold text-slate-800" onClick={(e) => { setMobileMenuOpen(false); handleSmoothScroll(e, '#pricing'); }}>Pricing</Link>
               <hr className="border-slate-100 my-2" />
               <Link to="/login" className="text-lg font-semibold text-slate-600" onClick={() => setMobileMenuOpen(false)}>Sign In</Link>
               <Link to="/signup" className="w-full py-4 bg-brand-primary text-white rounded-2xl text-lg font-bold text-center shadow-sm" onClick={() => setMobileMenuOpen(false)}>

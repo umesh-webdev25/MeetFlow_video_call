@@ -116,14 +116,6 @@ const Footer = () => {
                   href="#"
                   className="text-sm text-slate-400 hover:text-white transition-colors"
                 >
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-slate-400 hover:text-white transition-colors"
-                >
                   Careers
                 </a>
               </li>
