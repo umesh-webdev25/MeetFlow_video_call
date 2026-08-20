@@ -13,6 +13,30 @@ export default {
           'hover': '#1D4ED8',
         }
       },
+      keyframes: {
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        pulse: {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.8' },
+        },
+        'scale-in': {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+      },
+      animation: {
+        shimmer: 'shimmer 1.5s infinite',
+        float: 'float 3s ease-in-out infinite',
+        'pulse-slow': 'pulse 4s ease-in-out infinite',
+        'scale-in': 'scale-in 0.2s ease-out',
+      },
     },
   },
   plugins: [daisyui],
