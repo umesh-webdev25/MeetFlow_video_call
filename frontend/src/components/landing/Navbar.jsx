@@ -27,6 +27,15 @@ const MegaMenu = ({ title, items, isOpen }) => {
                 <Link
                   key={idx}
                   to={item.link}
+                  onClick={(e) => {
+                    if (item.link.startsWith('#')) {
+                      const element = document.querySelector(item.link);
+                      if (element) {
+                        e.preventDefault();
+                        element.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }
+                  }}
                   className="flex items-start gap-4 p-3 rounded-xl hover:bg-brand-50 transition-colors group/item"
                 >
                   <div className="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 group-hover/item:border-brand-100 group-hover/item:bg-white transition-colors">
