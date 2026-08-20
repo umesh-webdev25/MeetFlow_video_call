@@ -61,7 +61,7 @@ const HeroSection = () => {
               </span>
               <span className="text-sm font-bold text-brand-primary tracking-wide">
                 <Sparkles className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />
-                Now with AI-powered meeting summaries
+                Simple scheduling. Powerful meetings.
               </span>
             </div>
           </motion.div>
@@ -73,11 +73,11 @@ const HeroSection = () => {
           >
             <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-slate-900 tracking-tight leading-[1.05] mb-6">
               Meetings made{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary via-blue-600 to-purple-600">
+              <span className="text-brand-primary">
                 effortless
               </span>
               <span className="block text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-slate-700 mt-2">
-                with intelligent automation.
+                for modern teams.
               </span>
             </h1>
           </motion.div>
@@ -88,8 +88,8 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
           >
             <p className="text-lg md:text-xl xl:text-2xl text-slate-600 mb-10 max-w-3xl mx-auto leading-relaxed">
-              MeetFlow combines intelligent scheduling, <span className="text-brand-primary font-semibold">AI-powered</span> video calling, 
-              and automated meeting management into one seamless platform. 
+              MeetFlow combines intuitive scheduling, <span className="text-brand-primary font-semibold">high-quality</span> video calling, 
+              and centralized meeting management into one seamless platform. 
               <span className="block mt-1 text-slate-500">No more context switching. No more missed meetings.</span>
             </p>
           </motion.div>
