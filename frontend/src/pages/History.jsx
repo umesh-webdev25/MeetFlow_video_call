@@ -59,7 +59,7 @@ const History = () => {
       {/* ── PAGE HEADER ── */}
       <div className="relative mb-6 overflow-hidden flex items-center justify-between rounded-2xl border border-base-300/70 bg-base-200 px-6 py-6 shadow-sm sm:px-8">
         {/* Decorative illustration */}
-        <div className="pointer-events-none absolute inset-y-0 right-16 hidden w-64 items-center justify-center sm:flex">
+        <div className="pointer-events-none absolute inset-y-0 right-2 hidden w-64 items-center justify-center sm:flex">
           <svg
             viewBox="0 0 260 140"
             className="h-full w-full"
@@ -162,11 +162,6 @@ const History = () => {
             Monitor and manage all user sessions
           </p>
         </div>
-
-        {/* Right menu button */}
-        <button className="absolute right-6 top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-xl bg-base-100 border border-base-300 text-base-content/40 shadow-sm transition-all hover:text-base-content hover:bg-base-300 sm:right-8">
-          <MoreVerticalIcon className="size-5" />
-        </button>
       </div>
       {/* ── STAT CARDS ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-6">
