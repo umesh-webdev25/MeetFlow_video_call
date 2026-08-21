@@ -39,14 +39,22 @@ const SolutionsTabs = () => {
         </div>
 
         {/* Tabs Header */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12 p-1.5 bg-white border border-slate-200 rounded-full shadow-sm mx-auto max-w-fit">
+        <div 
+          role="tablist"
+          aria-label="Solutions"
+          className="flex flex-wrap justify-center gap-1 mb-12 p-1.5 bg-white border border-slate-200 rounded-full shadow-sm mx-auto max-w-fit"
+        >
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`panel-${tab.id}`}
+                id={`tab-${tab.id}`}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-full transition-colors z-10 ${
+                className={`relative flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-full transition-colors z-10 ${
                   isActive ? "text-white" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
@@ -72,6 +80,9 @@ const SolutionsTabs = () => {
               return (
                 <motion.div
                   key={tab.id}
+                  role="tabpanel"
+                  id={`panel-${tab.id}`}
+                  aria-labelledby={`tab-${tab.id}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}

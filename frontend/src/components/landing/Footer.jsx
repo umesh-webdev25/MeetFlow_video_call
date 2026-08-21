@@ -55,7 +55,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-4">Product</h4>
+            <h3 className="font-bold text-white mb-4">Product</h3>
             <ul className="space-y-3">
               <li>
                 <a
@@ -101,7 +101,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-4">Company</h4>
+            <h3 className="font-bold text-white mb-4">Company</h3>
             <ul className="space-y-3">
               <li>
                 <a
@@ -131,7 +131,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-4">Legal</h4>
+            <h3 className="font-bold text-white mb-4">Legal</h3>
             <ul className="space-y-3">
               <li>
                 <a

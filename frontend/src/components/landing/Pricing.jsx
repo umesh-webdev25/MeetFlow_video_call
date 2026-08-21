@@ -95,19 +95,24 @@ const Pricing = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-center justify-center gap-4 mt-8"
+            className="flex flex-col items-center justify-center mt-8"
           >
-            <span className={`text-sm font-bold transition-colors ${!isAnnual ? 'text-slate-900' : 'text-slate-400'}`}>Monthly</span>
-            <button
-              onClick={() => setIsAnnual(!isAnnual)}
-              className={`relative w-14 h-7 rounded-full transition-colors ${isAnnual ? 'bg-brand-primary' : 'bg-slate-300'}`}
-            >
-              <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${isAnnual ? 'translate-x-8' : 'translate-x-1'}`} />
-            </button>
-            <span className={`text-sm font-bold transition-colors ${isAnnual ? 'text-slate-900' : 'text-slate-400'}`}>
-              Annual
-              <span className="ml-1 text-xs text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-full">Save 20%</span>
-            </span>
+            <span className="mb-3 text-xs text-emerald-600 font-bold bg-emerald-50 px-2.5 py-1 rounded-full">Save 20% on Annual</span>
+            <div className="flex items-center justify-center gap-4">
+              <span className={`text-sm font-bold transition-colors ${!isAnnual ? 'text-slate-900' : 'text-slate-400'}`}>Monthly</span>
+              <button
+                role="switch"
+                aria-checked={isAnnual}
+                aria-label="Toggle annual billing"
+                onClick={() => setIsAnnual(!isAnnual)}
+                className={`relative w-14 h-7 rounded-full transition-colors ${isAnnual ? 'bg-brand-primary' : 'bg-slate-300'}`}
+              >
+                <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${isAnnual ? 'translate-x-8' : 'translate-x-1'}`} />
+              </button>
+              <span className={`text-sm font-bold transition-colors ${isAnnual ? 'text-slate-900' : 'text-slate-400'}`}>
+                Annual
+              </span>
+            </div>
           </motion.div>
         </div>
 
@@ -119,9 +124,9 @@ const Pricing = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 + 0.2 }}
-              className={`relative p-8 rounded-2xl border flex flex-col ${
+              className={`h-full relative p-8 rounded-2xl border flex flex-col ${
                 plan.popular
-                  ? 'bg-gradient-to-b from-white to-brand-50/30 border-brand-200 shadow-xl shadow-brand-primary/10 scale-105'
+                  ? 'bg-gradient-to-b from-white to-brand-50/30 border-brand-200 shadow-xl shadow-brand-primary/10 scale-105 z-10'
                   : 'bg-white border-slate-200 shadow-sm hover:shadow-lg'
               } transition-all duration-300`}
             >
@@ -159,18 +164,12 @@ const Pricing = () => {
               </div>
 
               <ul className="space-y-3 mb-8 flex-1">
-                {plan.features.map((feature, i) => (
+                {plan.features.filter(f => f.included).map((feature, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm">
-                    {feature.included ? (
-                      <div className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
-                        <Check className="w-3 h-3 text-emerald-600" />
-                      </div>
-                    ) : (
-                      <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
-                        <X className="w-3 h-3 text-slate-400" />
-                      </div>
-                    )}
-                    <span className={feature.included ? 'text-slate-700' : 'text-slate-400'}>
+                    <div className="w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
+                      <Check className="w-3 h-3 text-emerald-600" />
+                    </div>
+                    <span className="text-slate-700">
                       {feature.text}
                     </span>
                   </li>

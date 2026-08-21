@@ -8,7 +8,7 @@ const TrustedBy = () => {
     <section className="py-16 border-y border-slate-200 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-8 text-center">
         <ScrollReveal>
-          <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest">
+          <p className="text-sm font-semibold text-slate-500 tracking-wide">
             Trusted by innovative teams worldwide
           </p>
         </ScrollReveal>

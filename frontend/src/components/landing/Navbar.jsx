@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Video, Calendar, Shield, PlayCircle, BarChart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "../ui/Button";
 
 const handleSmoothScroll = (e, link) => {
   if (link && link.startsWith('#')) {
@@ -89,7 +90,7 @@ const Navbar = () => {
           : "bg-transparent py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
           <div className="w-8 h-8 rounded bg-brand-primary flex items-center justify-center shadow-sm shadow-brand-primary/20 transition-transform group-hover:scale-105">
@@ -130,10 +131,10 @@ const Navbar = () => {
             Sign In
           </Link>
           {/* Re-skinned Shiny Button per prompt */}
-          <Link to="/signup" className="relative overflow-hidden px-5 py-2.5 bg-brand-primary text-white rounded-full text-sm font-bold shadow-sm shadow-brand-primary/20 hover:bg-brand-hover hover:-translate-y-0.5 transition-all group">
+          <Button href="/signup" className="group">
             Get Started
             <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-          </Link>
+          </Button>
         </div>
 
         {/* Mobile Toggle */}

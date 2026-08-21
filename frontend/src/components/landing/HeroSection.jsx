@@ -125,7 +125,7 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
             className="mt-16 pt-16 border-t border-slate-200/50"
           >
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">
+            <p className="text-sm font-bold text-slate-400 tracking-wide mb-6">
               Trusted by innovative teams worldwide
             </p>
             <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">

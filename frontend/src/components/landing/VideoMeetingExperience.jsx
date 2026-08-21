@@ -15,7 +15,7 @@ const VideoMeetingExperience = () => {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-50 border border-brand-100 rounded-full mb-6 text-brand-primary shadow-sm">
               <Video className="w-4 h-4" />
-              <span className="text-xs font-bold tracking-widest uppercase">Meeting Interface</span>
+              <span className="text-xs font-bold tracking-widest">Meeting Interface</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight mb-6">
               Crystal clear connection.
